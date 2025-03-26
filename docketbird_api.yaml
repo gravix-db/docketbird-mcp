@@ -1,0 +1,3311 @@
+openapi: 3.0.0
+info:
+  version: 0.1.2
+  title: DocketBird API
+  description: |-
+    The DocketBird API enables users to retrieve case and docket information pertaining to court cases, and to manage various aspects of their accounts.
+
+    The API uses bearer authentication. Each DocketBird user has a separate bearer token, which can be obtained by logging into DocketBird and accessing the Settings menu.
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/DocketBird/DocketBird/0.1.2'
+  - description: DocketBird API Server
+    url: 'https://api.docketbird.com/'
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+paths:
+  '/cases/{case_id}':
+    get:
+      summary: returns a case
+      description: This returns an object describing a single case.
+      tags:
+        - Cases
+      parameters:
+        - name: case_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned a case object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      case:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          title:
+                            type: string
+                          court_id:
+                            type: string
+                          url:
+                            type: string
+                          pacer_case_id:
+                            type: string
+                          client_code:
+                            type: string
+                x-examples:
+                  Example 1:
+                    data:
+                      case:
+                        id: 'cand-4:2022-cv-04775'
+                        title: Starratt et al v. Immedia Semiconductor LLC et al
+                        court_id: cand
+                        url: 'https://ecf.cand.uscourts.gov/cgi-bin/iqquerymenu.pl?399469'
+                        pacer_case_id: '399469'
+                        client_code: null
+    parameters:
+      - schema:
+          type: string
+        name: case_id
+        in: path
+        required: true
+  /cases:
+    get:
+      summary: returns a list of cases belonging to an account
+      description: Returns a list of cases belonging either to the user or to the user's company
+      tags:
+        - Cases
+      parameters:
+        - name: scope
+          in: query
+          description: Either "company" or "user"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned a list of cases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      cases:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            court_id:
+                              type: string
+                            title:
+                              type: string
+                            case_number:
+                              type: string
+                            date_filed:
+                              type: string
+                x-examples:
+                  Example 1:
+                    data:
+                      cases:
+                        - id: 'akb-1:2017-bk-00112'
+                          court_id: akb
+                          title: Delia Lumba Ruiz
+                          case_number: null
+                          date_filed: '2017-03-29'
+                        - id: 'akb-2:2014-bk-00232'
+                          court_id: akb
+                          title: 'Kenneth Arden Hughes, III'
+                          case_number: null
+                          date_filed: null
+                        - id: 'akd-3:2013-cv-00102'
+                          court_id: akd
+                          title: 'Security Alarm Financing Enterprises, L.P. v. Alarm Protection Technology, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'almd-2:2012-cv-00957'
+                          court_id: almd
+                          title: Federal Deposit Insurance Corporation v. PricewaterhouseCoopers LLP et al(MEMBER CASE)
+                          case_number: null
+                          date_filed: null
+                        - id: 'almd-2:2016-cv-00800'
+                          court_id: almd
+                          title: 'Corbin et al v. Jackson Hospital & Clinic, Inc.(CONSENT)'
+                          case_number: null
+                          date_filed: null
+                        - id: 'almd-3:2020-cv-00382'
+                          court_id: almd
+                          title: 'Pear Tree Group, LLC v. The Cincinnati Insurance Company'
+                          case_number: null
+                          date_filed: null
+                        - id: 'alnd-2:2020-cv-00265'
+                          court_id: alnd
+                          title: Baxley et al v. Jackson National Life Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'alnd-2:2020-cv-01084'
+                          court_id: alnd
+                          title: The Woolworth LLC v. The Cincinnati Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'alnd-5:2020-cv-00640'
+                          court_id: alnd
+                          title: Woods v. Quicken Loans Inc
+                          case_number: null
+                          date_filed: null
+                        - id: 'alnd-7:2020-cv-00860'
+                          court_id: alnd
+                          title: 'Dukes Clothing LLC v. Cincinnati Insurance Company, the'
+                          case_number: null
+                          date_filed: null
+                        - id: 'alnd-7:2021-cv-00618'
+                          court_id: alnd
+                          title: 'Snodgrass v. Prudential Insurance Company of America, The'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ared-2:2019-cv-00035'
+                          court_id: ared
+                          title: King v. Social Security Administration
+                          case_number: null
+                          date_filed: null
+                        - id: 'ared-3:2014-cv-00269'
+                          court_id: ared
+                          title: Hart v. Brightwater Capital LLC
+                          case_number: null
+                          date_filed: null
+                        - id: 'ared-4:2021-cv-00456'
+                          court_id: ared
+                          title: Bell v. Amazon Logistics Inc et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'azd-2:2015-md-02641'
+                          court_id: azd
+                          title: 'In re: Bard Ivc Filters Products Liability Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'azd-2:2020-cv-01797'
+                          court_id: azd
+                          title: Borteanu v. Nikola Corporation et al
+                          case_number: null
+                          date_filed: '2020-09-16'
+                        - id: 'azd-2:2022-cv-00036'
+                          court_id: azd
+                          title: 'Pontiac, City of General Employees Retirement System v. First Solar Incorporated et al'
+                          case_number: null
+                          date_filed: '2022-01-07'
+                        - id: 'azd-2:2022-cv-00207'
+                          court_id: azd
+                          title: 'Maricopa, County of v. Juul Labs Incorporated et al'
+                          case_number: null
+                          date_filed: '2022-02-09'
+                        - id: c-cook-ch-2015-2015-ch-17298
+                          court_id: cook
+                          title: 'NATIONSATAR MORTGAGE LLC v. LACY, EILEEN, et al.'
+                          case_number: 2015-CH-17298
+                          date_filed: '2015-11-25'
+                        - id: c-cook-ch-2019-2019-ch-06126
+                          court_id: cook
+                          title: ANDREW BROWAR<br> v. MELISSA BURTON<br>JINGYUAN FAN<br>HAROLD HAERING<br>TERESA PULIDO<br>MIDWESTERN UNIVERSITY<br>
+                          case_number: 2019CH06126
+                          date_filed: '2019-05-16'
+                        - id: c-cook-ch-2024-2024-ch-04148
+                          court_id: cook
+                          title: 'WESTSIDE DESIGN/BUILD, LLC<br> v. WOODLAKE PACIFIC HOLDINGS LLC<br>CORNERSTONE BANK<br>WOODLAKE SPECIALTY HOSPITAL LLC<br>ML GROUP DESIGN &amp; DEVELOPMENT, LLC<br>METROPOLITAN FIRE PROTECTION, INC.<br>GARDEN ELECTRIC, INC.<br>BEAR CONSTRUCTION COMPANY<br>EXCEL MECHANICAL SERVICES LLC<br>BERRY ELECT'
+                          case_number: 2024CH04148
+                          date_filed: '2024-05-06'
+                        - id: c-cook-cv-2004-2004-m1-123360
+                          court_id: cook
+                          title: 'RESURGENCE FINANCI v. CALUMET CITY #155, et al.'
+                          case_number: 2004-M1-123360
+                          date_filed: '2004-04-16'
+                        - id: c-cook-cv-2020-2020-m6-006763
+                          court_id: cook
+                          title: 'HISKES, JAMILYN v. GONZALEZ-GARCIA, JU'
+                          case_number: 2020-M6-006763
+                          date_filed: '2020-10-20'
+                        - id: c-cook-cv-2022-2022-m-6008548
+                          court_id: cook
+                          title: 'FIRSTKEY HOMES, LLC v. ROY LUSBY, et al.'
+                          case_number: '20226008548'
+                          date_filed: '2022-10-11'
+                        - id: c-cook-d-2021-2021-d-006626
+                          court_id: cook
+                          title: William J. Bramlett v. Comfort Edmond
+                          case_number: 2021D006626
+                          date_filed: '2021-07-30'
+                        - id: c-cook-d-2021-2021-d-079208
+                          court_id: cook
+                          title: 'ASHLEY BAKE v. Minor Bailey, et al.'
+                          case_number: 2021D079208
+                          date_filed: '2021-02-22'
+                        - id: c-cook-l-2018-2018-l-011008
+                          court_id: cook
+                          title: 'MONDELEZ INTERNATIONAL, I v. ZURICH AMERICAN INSURANCE'
+                          case_number: 2018-L-011008
+                          date_filed: '2018-10-10'
+                        - id: c-cook-l-2021-2021-l-050365
+                          court_id: cook
+                          title: 'US FOODS v. MURPHY, MICHAEL'
+                          case_number: 2021-L-050365
+                          date_filed: '2021-08-11'
+                        - id: c-cook-l-2022-2022-l-002342
+                          court_id: cook
+                          title: 'Alger Capital Appreciation, et al. v. The Boeing Company, et al.'
+                          case_number: 2022-L-002342
+                          date_filed: '2022-03-09'
+                        - id: c-dls-2022-cc-22-06345-b
+                          court_id: dls
+                          title: 'SAMANTHA HUGHES vs. ALFREDO OLGUIN, TEXAS FARM BUREAU MUTUAL INSURANCE COMPANY'
+                          case_number: CC-22-06345-B
+                          date_filed: '2022-11-08'
+                        - id: c-dls-2022-cc-22-06823-e
+                          court_id: dls
+                          title: 'YINI CRUZ RUIZ, INDIVIDUALLY AND AS NEXT FRIEND OF MINOR vs. CARLOS ORELLANA, CHATMAN BONNIE BONNER, ERICK QUEVEDO'
+                          case_number: CC-22-06823-E
+                          date_filed: '2022-12-01'
+                        - id: c-dls-2022-dc-22-01490
+                          court_id: dls
+                          title: 'ESTEBAN POWELLet al vs. MATTHEW EVANS, MDet al'
+                          case_number: DC-22-01490
+                          date_filed: '2022-02-04'
+                        - id: c-dls-2022-dc-22-14277
+                          court_id: dls
+                          title: ROBERT KENNEDY vs. FRANCISCO CORNEJO
+                          case_number: DC-22-14277
+                          date_filed: '2022-10-12'
+                        - id: c-lasu-2009-cv-SD026903
+                          court_id: lasu
+                          title: Howard Robert Kennedy vs Pauline Munro-Kennedy
+                          case_number: SD026903
+                          date_filed: '2009-01-14'
+                        - id: c-lasu-2013-cv-BZ142815
+                          court_id: lasu
+                          title: County of Los Angeles vs. Adam Robert Kennedy
+                          case_number: BZ142815
+                          date_filed: '2013-08-26'
+                        - id: c-lasu-2018-cr-LACBA464483-01
+                          court_id: lasu
+                          title: Sahar Sarid
+                          case_number: LACBA464483-01
+                          date_filed: '2018-05-10'
+                        - id: c-lasu-2019-cv-19STCV18656
+                          court_id: lasu
+                          title: County of Los Angeles vs City of Los Angeles
+                          case_number: 19STCV18656
+                          date_filed: '2019-05-29'
+                        - id: c-lasu-2020-cr-LAVLA093696-01
+                          court_id: lasu
+                          title: Christopher David Sumbs
+                          case_number: LAVLA093696-01
+                          date_filed: '2020-10-30'
+                        - id: c-lasu-2022-cv-22NWLC17431
+                          court_id: lasu
+                          title: 'Onemain Financial Group, LLC vs Kevin A Smith'
+                          case_number: 22NWLC17431
+                          date_filed: '2022-07-28'
+                        - id: c-lasu-2022-cv-22STPB09685
+                          court_id: lasu
+                          title: 'Andrews, Joseph Reginald - Decedent'
+                          case_number: 22STPB09685
+                          date_filed: '2022-09-27'
+                        - id: c-lasu-2024-cv-24STCV01599
+                          court_id: lasu
+                          title: 'Daniel M. Landis vs Boston Market Corporation, et al.'
+                          case_number: 24STCV01599
+                          date_filed: '2024-01-22'
+                        - id: c-miami-2019-132019ca009205000001
+                          court_id: miami
+                          title: TURCHROME KROM MADENCILI SANAYI VE DIS TICARET LIM VS MUSTAFA CEVIK
+                          case_number: 132019ca009205000001
+                          date_filed: '2019-03-27'
+                        - id: c-miami-2021-132021ca013572000001
+                          court_id: miami
+                          title: 'ROYAL CARIBBEAN CRUISES, LTD. VS BIANCHI & CECCHI SERVICE, LLC ET AL'
+                          case_number: 132021ca013572000001
+                          date_filed: '2021-06-10'
+                        - id: c-miami-2021-132021ca016776000001
+                          court_id: miami
+                          title: 'RAFAEL GUILLERMO LOPEZ PRENS VS PULLMANTUR SHIP MANAGEMENT, LTD. ET AL'
+                          case_number: 132021ca016776000001
+                          date_filed: '2021-07-07'
+                        - id: c-miami-2021-132021ca024784000001
+                          court_id: miami
+                          title: MARION LONDON ET AL VS ROYAL CARIBBEAN CRUISES LTD ET AL
+                          case_number: 132021ca024784000001
+                          date_filed: '2021-11-09'
+                        - id: c-miami-2021-132021ca024803000001
+                          court_id: miami
+                          title: JOHN COZAD VS ROYAL CARIBBEAN CRUISES LTD ET AL
+                          case_number: 132021ca024803000001
+                          date_filed: '2021-11-09'
+                        - id: c-miami-2021-132021ca025779000001
+                          court_id: miami
+                          title: NORMA NOESEN ET AL VS ROYAL CARIBBEAN CRUISES LTD
+                          case_number: 132021ca025779000001
+                          date_filed: '2021-11-24'
+                        - id: c-miami-2021-132021sc011961000005
+                          court_id: miami
+                          title: 'PATH MEDICAL, LLC VS PROGRESSIVE SELECT INSURANCE COMPANY'
+                          case_number: 132021sc011961000005
+                          date_filed: '2021-04-30'
+                        - id: c-miami-2021-132021sc020877000026
+                          court_id: miami
+                          title: JAQUALIA JONES VS ROYAL CARIBBEAN CRUISES LTD.
+                          case_number: 132021sc020877000026
+                          date_filed: '2021-06-22'
+                        - id: c-miami-2022-132022ca001566000001
+                          court_id: miami
+                          title: BIANCA COZAD VS ROYAL CARIBBEAN CRUISES LTD ET AL
+                          case_number: 132022ca001566000001
+                          date_filed: '2022-01-26'
+                        - id: c-miami-2022-132022ca001622000001
+                          court_id: miami
+                          title: ALICE XIAOMAN ZHANG VS ROYAL CARIBBEAN CRUISES LTD ET AL
+                          case_number: 132022ca001622000001
+                          date_filed: '2022-01-27'
+                        - id: c-miami-2022-132022ca001630000001
+                          court_id: miami
+                          title: ANNIE YONGAN LU VS ROYAL CARIBBEAN CRUISES LTD. ET AL
+                          case_number: 132022ca001630000001
+                          date_filed: '2022-01-27'
+                        - id: c-miami-2022-132022ca001631000001
+                          court_id: miami
+                          title: EAN-HUI OOI VS ROYAL CARIBBEAN CRUISES LTD. ET AL
+                          case_number: 132022ca001631000001
+                          date_filed: '2022-01-27'
+                        - id: c-miami-2022-132022ca001725000001
+                          court_id: miami
+                          title: 'INDIRA BARRETO VS INTERNATIONAL CRUISE SHOPS, LTD. ET AL'
+                          case_number: 132022ca001725000001
+                          date_filed: '2022-01-28'
+                        - id: c-miami-2022-132022ca001914000001
+                          court_id: miami
+                          title: LAY HUI OOI ET AL VS ROYAL CARIBBEAN CRUISES LTD ET AL
+                          case_number: 132022ca001914000001
+                          date_filed: '2022-02-01'
+                        - id: c-miami-2022-132022ca001922000001
+                          court_id: miami
+                          title: JESSE LANGFORD ET AL VS ROYAL CARIBBEAN CRUISES LTD ET AL
+                          case_number: 132022ca001922000001
+                          date_filed: '2022-02-01'
+                        - id: c-miami-2022-132022ca009415000001
+                          court_id: miami
+                          title: FRANCESCO LEFEBVRE D'OVIDIO VS ROYAL CARIBBEAN CRUISES LTD
+                          case_number: 132022ca009415000001
+                          date_filed: '2022-05-23'
+                        - id: c-miami-2022-132022ca013800000001
+                          court_id: miami
+                          title: 'JESSIE OWEN DIXON KELLY VS INTERNATIONAL CRUISE SHOPS, LTD. ET AL'
+                          case_number: 132022ca013800000001
+                          date_filed: '2022-07-24'
+                        - id: c-miami-2022-132022ca015564000001
+                          court_id: miami
+                          title: 'DAWNA HENRY VS ROYAL CARIBBEAN CRUISES, LTD.'
+                          case_number: 132022ca015564000001
+                          date_filed: '2022-08-18'
+                        - id: c-miami-2022-132022ca016210000001
+                          court_id: miami
+                          title: SILVERSEA CRUISES LTD. ET AL VS MATIAS ANDRES LIRA ET AL
+                          case_number: 132022ca016210000001
+                          date_filed: '2022-08-31'
+                        - id: c-miami-2022-132022ca020450000001
+                          court_id: miami
+                          title: 'OSCAR TORRES VS ROYAL CARIBBEAN CRUISES, LTD.'
+                          case_number: 132022ca020450000001
+                          date_filed: '2022-10-25'
+                        - id: c-miami-2022-132022ca020960000001
+                          court_id: miami
+                          title: JANE DOE (L.L.) VS ROYAL CARIBBEAN CRUISES LTD.
+                          case_number: 132022ca020960000001
+                          date_filed: '2022-11-01'
+                        - id: c-miami-2022-132022cc021265000005
+                          court_id: miami
+                          title: FREDDY X MUNOZ ET AL VS ROYAL CARIBBEAN CRUISES LTD
+                          case_number: 132022cc021265000005
+                          date_filed: '2022-07-18'
+                        - id: c-miami-2022-132022cc023242000005
+                          court_id: miami
+                          title: CAROL ANN CAJIGAS VS. ROYAL CARIBBEAN INTERNATIONAL
+                          case_number: 132022cc023242000005
+                          date_filed: '2022-08-01'
+                        - id: c-miami-2022-132022dr014001a00104
+                          court_id: miami
+                          title: 'RODRIGUEZ SMITH, MAYA PRISCILLA VS SMITH, KEVIN JERODE ALEXANDER'
+                          case_number: 132022dr014001a00104
+                          date_filed: '2022-07-19'
+                        - id: c-miami-2022-132022dr015129a00104
+                          court_id: miami
+                          title: 'RODRIGUEZ SMITH, MAYA PRISCILLA VS SMITH, KEVIN JERODE ALEXANDER'
+                          case_number: 132022dr015129a00104
+                          date_filed: '2022-08-03'
+                        - id: c-miami-2022-132022sc007075000026
+                          court_id: miami
+                          title: 'ALLAN POTESHMAN VS ROYAL CARIBBEAN CRUISES LTD.,'
+                          case_number: 132022sc007075000026
+                          date_filed: '2022-03-25'
+                        - id: c-miami-2022-132022sc019047000025
+                          court_id: miami
+                          title: GARY ROBINSON VS. ROYAL CARIBBEAN CRUISE LTD
+                          case_number: 132022sc019047000025
+                          date_filed: '2022-07-20'
+                        - id: c-miami-2022-132022sc028769000026
+                          court_id: miami
+                          title: 'ALBERTO TORRES VS ROYAL CARIBBEAN CRUISES, LTD'
+                          case_number: 132022sc028769000026
+                          date_filed: '2022-09-16'
+                        - id: c-njs-1991-atl-dc-009405-91
+                          court_id: njs
+                          title: 'CAPE ATL. M R I VS KENNEDY, ROBERT & DINA'
+                          case_number: ATL DC 009405-91
+                          date_filed: '1991-12-16'
+                        - id: c-njs-1998-bur-l-001642-98
+                          court_id: njs
+                          title: CENTREX CAPITAL VS SMITH
+                          case_number: BUR L 001642-98
+                          date_filed: '1998-05-29'
+                        - id: c-njs-2005-ber-dc-007379-05
+                          court_id: njs
+                          title: NEW JERSEY NATURAL G VS KENNEDY ROBERT
+                          case_number: BER DC 007379-05
+                          date_filed: '2005-04-28'
+                        - id: c-njs-2008-esx-f-001857-08
+                          court_id: njs
+                          title: COUNTRYWIDE HOME LOANS INC VS SMITH
+                          case_number: ESX F 001857-08
+                          date_filed: '2008-01-16'
+                        - id: c-njs-2010-mer-c-000042-10
+                          court_id: njs
+                          title: RICHARD TUSCANO VS RONALD TUSCANO
+                          case_number: MER C 000042-10
+                          date_filed: '2010-05-24'
+                        - id: c-njs-2014-atl-f-029678-14
+                          court_id: njs
+                          title: VICTORIA CROSSING TO VS SMITH KEVIN
+                          case_number: ATL F 029678-14
+                          date_filed: '2014-07-18'
+                        - id: c-njs-2016-ber-l-008763-16
+                          court_id: njs
+                          title: SMITH VS YAZDIAN
+                          case_number: BER L 008763-16
+                          date_filed: '2016-12-13'
+                        - id: c-njs-2017-ocn-f-005273-17
+                          court_id: njs
+                          title: KENNEDY VS MAZZOLA FRANK
+                          case_number: OCN F 005273-17
+                          date_filed: '2017-03-02'
+                        - id: c-njs-2020-atl-dc-004459-20
+                          court_id: njs
+                          title: MIDLAND CREDIT MANAG VS SMITH KEVIN
+                          case_number: ATL DC 004459-20
+                          date_filed: '2020-09-22'
+                        - id: c-njs-2020-glo-l-000798-20
+                          court_id: njs
+                          title: WELLS SHARON VS WALMART
+                          case_number: GLO L 000798-20
+                          date_filed: '2020-07-16'
+                        - id: c-njs-2020-hud-l-002558-20
+                          court_id: njs
+                          title: MATESIC YVONNE VS WALMART
+                          case_number: HUD L 002558-20
+                          date_filed: '2020-07-15'
+                        - id: c-njs-2021-ber-l-008438-21
+                          court_id: njs
+                          title: 'Graham Helen Vs Daytona Auto Sales, Inc.'
+                          case_number: BER L 008438-21
+                          date_filed: '2021-12-29'
+                        - id: c-njs-2021-cum-f-000563-21
+                          court_id: njs
+                          title: 'REHABITATS, LLC VS TRACY DACY'
+                          case_number: CUM F 000563-21
+                          date_filed: '2021-02-03'
+                        - id: c-njs-2021-esx-dc-000516-21
+                          court_id: njs
+                          title: LVNV FUNDING LLC VS SMITH KEVIN
+                          case_number: ESX DC 000516-21
+                          date_filed: '2021-01-14'
+                        - id: c-njs-2022-esx-l-005086-22
+                          court_id: njs
+                          title: Testa Thomas Vs Coppola Vincent
+                          case_number: ESX L 005086-22
+                          date_filed: '2022-08-29'
+                        - id: c-njs-2023-ber-l-002561-23
+                          court_id: njs
+                          title: Progressive Spine & Orthopaed Vs Aetna Life Ins
+                          case_number: BER L 002561-23
+                          date_filed: '2023-05-15'
+                        - id: c-njs-2023-esx-l-005471-23
+                          court_id: njs
+                          title: Vito Tree Care & Lan D Managem Vs Nature'S Choic
+                          case_number: ESX L 005471-23
+                          date_filed: '2023-08-24'
+                        - id: c-nyap1-2021-2021-04446
+                          court_id: nyap1
+                          title: MICHAEL CISNEROS individually et al v. LOGAN COOK et al
+                          case_number: 2021-04446
+                          date_filed: '2021-12-01'
+                        - id: c-nybro-2020-33450/2020E
+                          court_id: nybro
+                          title: Daniel Chisholm v. Angelica M. Ramirez-Soriano et al
+                          case_number: 33450/2020E
+                          date_filed: '2020-11-11'
+                        - id: c-nybro-2021-816968/2021E
+                          court_id: nybro
+                          title: UHG I LLC v. Gissel Pierrette
+                          case_number: 816968/2021E
+                          date_filed: '2021-12-15'
+                        - id: c-nybro-2022-805159/2022E
+                          court_id: nybro
+                          title: Donnell York v. The City of New York
+                          case_number: 805159/2022E
+                          date_filed: '2022-04-04'
+                        - id: c-nydut-2021-2021-53963
+                          court_id: nydut
+                          title: Donald J. Trump v. Mary L. Trump et al
+                          case_number: 2021-53963
+                          date_filed: '2021-10-14'
+                        - id: c-nydut-2023-2023-52952
+                          court_id: nydut
+                          title: Kevin Smith v. Hyde Park Town of
+                          case_number: 2023-52952
+                          date_filed: '2023-07-28'
+                        - id: c-nyeri-2021-815469/2021
+                          court_id: nyeri
+                          title: ERIE COUNTY MEDICAL CENTER CORPORATION v. TED PAPROCKI
+                          case_number: 815469/2021
+                          date_filed: '2021-11-11'
+                        - id: c-nykin-2022-535265/2022
+                          court_id: nykin
+                          title: Anthony Walker v. Neal Shalom et al
+                          case_number: 535265/2022
+                          date_filed: '2022-12-05'
+                        - id: c-nynew-2019-650855/2019
+                          court_id: nynew
+                          title: Andrew J. Lis v. Jason M Lancaster et al
+                          case_number: 650855/2019
+                          date_filed: '2019-02-08'
+                        - id: c-nynew-2021-453299/2021
+                          court_id: nynew
+                          title: Donald J. Trump v. Mary L. Trump et al
+                          case_number: 453299/2021
+                          date_filed: '2021-09-21'
+                        - id: c-nyric-2017-150770/2017
+                          court_id: nyric
+                          title: Angel Perez - v. - Lauren Delucrezia
+                          case_number: 150770/2017
+                          date_filed: '2017-04-03'
+                        - id: c-nywes-2024-55992/2024
+                          court_id: nywes
+                          title: Jamie Heffernan v. Anthony Kolich et al
+                          case_number: 55992/2024
+                          date_filed: '2024-01-21'
+                        - id: c-scc-2020-c2009241
+                          court_id: scc
+                          title: 'THE PEOPLE OF THE STATE OF CALIFORNIA vs. ASSOULINE, ELI'
+                          case_number: C2009241
+                          date_filed: '2020-07-01'
+                        - id: c-scc-2022-22cv407859
+                          court_id: scc
+                          title: ADAM THOSEBY vs APPLE INC.
+                          case_number: 22CV407859
+                          date_filed: '2022-11-23'
+                        - id: c-scc-2023-23ch011441
+                          court_id: scc
+                          title: Apple Inc. vs. Jason Schoeffner
+                          case_number: 23CH011441
+                          date_filed: '2023-02-17'
+                        - id: c-scc-2023-23cv411446
+                          court_id: scc
+                          title: 'In Re: Apple Inc.'
+                          case_number: 23CV411446
+                          date_filed: '2023-02-24'
+                        - id: c-scc-2023-23cv414775
+                          court_id: scc
+                          title: Donna Lew vs GOLDMAN SACHS USA et al
+                          case_number: 23CV414775
+                          date_filed: '2023-04-18'
+                        - id: c-scc-2023-23sc089107
+                          court_id: scc
+                          title: 'ROBERT MCDONALD, Jr. vs Apple, Inc.'
+                          case_number: 23SC089107
+                          date_filed: '2023-03-06'
+                        - id: c-sfc-2022-CGC22602784
+                          court_id: sfc
+                          title: TAIMING ZHANG VS. TWITTER INC. ET AL
+                          case_number: CGC22602784
+                          date_filed: '2022-11-08'
+                        - id: c-uc-ar-cntycirct-XRtJzcdgKxady7-2023-ja59d2f775f7c8
+                          court_id: uc-ar-cntycirct-XRtJzcdgKxady7
+                          title: KRISTIN KENNEDY V. WILLIAM KENNEDY -NON-TRIAL
+                          case_number: 43DR-23-733
+                          date_filed: '2023-11-01'
+                        - id: c-uc-ar-cntydistct-TLEVxEBJFPVQv8-2023-iw9b2ed146f1a6
+                          court_id: uc-ar-cntydistct-TLEVxEBJFPVQv8
+                          title: KENNEDY BERLIN -NON-TRIAL
+                          case_number: 23PR-23-705
+                          date_filed: '2023-11-13'
+                        - id: c-uc-ar-ctapp-8YUBcnSdoEYtWE-2023-je1d4f5a34ed65
+                          court_id: uc-ar-ctapp-8YUBcnSdoEYtWE
+                          title: JEREMY KENNEDY V ARKANSAS PAROLE BOARD
+                          case_number: CV-23-842
+                          date_filed: '2023-12-28'
+                        - id: c-uc-ar-supct-F4aegvVCRT4zch-2023-jef739845a8b2d
+                          court_id: uc-ar-supct-F4aegvVCRT4zch
+                          title: JEREMY KENNEDY V ARKANSAS PAROLE BOARD
+                          case_number: CV-23-504
+                          date_filed: '2023-07-27'
+                        - id: c-uc-az-jct-cFsFXycUfQhyPN-2022-ac984d41e7a47d
+                          court_id: uc-az-jct-cFsFXycUfQhyPN
+                          title: 'PORTFOLIO RECOVERY ASSOCIATES, LLC VS KENNEDY MACK'
+                          case_number: CC2022129591
+                          date_filed: '2022-08-02'
+                        - id: c-uc-az-jpct-WtxmyH5chFMZ6P-2019-la96dff0798708
+                          court_id: uc-az-jpct-WtxmyH5chFMZ6P
+                          title: STATE OF ARIZONA vs KENNEDY
+                          case_number: J-1505-CT-2019000809
+                          date_filed: '2019-04-19'
+                        - id: c-uc-ca-ctapp-jN3RzhCuWsiygq-2023-bs46d5c4ebf30a
+                          court_id: uc-ca-ctapp-jN3RzhCuWsiygq
+                          title: Sanborn v. Kennedy
+                          case_number: H050910
+                          date_filed: '2023-03-23'
+                        - id: c-uc-ca-supct-JYDiNesp979kTF-2023-bs46bfca9a0038
+                          court_id: uc-ca-supct-JYDiNesp979kTF
+                          title: BALDWIN-KENNEDY ON DISCIPLINE
+                          case_number: S282557
+                          date_filed: '2023-11-01'
+                        - id: c-uc-ca-superct-3tv4GNBcsFGmsi-2024-bj1e53d722d180
+                          court_id: uc-ca-superct-3tv4GNBcsFGmsi
+                          title: Kennedy Key vs. Shadasha Herrera
+                          case_number: 37-2024-00000307-CU-
+                          date_filed: '2024-01-04'
+                        - id: c-uc-ca-superct-cTkxTTLRwLgsEP-2024-ai4048605e74cd
+                          court_id: uc-ca-superct-cTkxTTLRwLgsEP
+                          title: James Richard Kennedy (Estate)
+                          case_number: 24CEPR00270
+                          date_filed: '2024-02-16'
+                        - id: c-uc-ca-superct-NNv9SxXgQg6Ynv-2024-bg1dd42bfecc6a
+                          court_id: uc-ca-superct-NNv9SxXgQg6Ynv
+                          title: 'Jacqueline Diaz -v- Kim Johnson, Director'
+                          case_number: CIVSB2407192
+                          date_filed: '2024-03-12'
+                        - id: c-uc-ca-superct-V4vCEaKrhystBz-2024-ar711995b0c78f
+                          court_id: uc-ca-superct-V4vCEaKrhystBz
+                          title: 'MARY LEZAMS, ET AL. VS KIM JOHNSON,,'
+                          case_number: 24STCP01124
+                          date_filed: '2024-04-09'
+                        - id: c-uc-ca-superct-WMygTBww9BG5bU-2023-ay575fba01520d
+                          court_id: uc-ca-superct-WMygTBww9BG5bU
+                          title: 'Kennedy, Jeremy Pierce'
+                          case_number: 24NM01628
+                          date_filed: '2023-12-24'
+                        - id: c-uc-ct-appct-ZCoJLqZuEZmqDq-2023-kn45e6b08d26a1
+                          court_id: uc-ct-appct-ZCoJLqZuEZmqDq
+                          title: GEORGE SCRIVENER JR v. GEORGE A. LAW (ESTATE OF HARRY KENNEDY) ET AL.
+                          case_number: AC 47137
+                          date_filed: '2023-11-27'
+                        - id: c-uc-ct-supct-GnqYcTtmMLEzPw-2019-kn2def944f0fae
+                          court_id: uc-ct-supct-GnqYcTtmMLEzPw
+                          title: FATIMA K. DE ALMEIDA-KENNEDY v. JAMES KENNEDY
+                          case_number: SC 180421
+                          date_filed: '2019-04-17'
+                        - id: c-uc-dc-ctapp-JTk4orN7hupzoE-2021-ks646aaa1bdb0a
+                          court_id: uc-dc-ctapp-JTk4orN7hupzoE
+                          title: JOHN F. KENNEDY V. UNITED STATES
+                          case_number: 21-CO-0336
+                          date_filed: '2021-05-12'
+                        - id: c-uc-dc-superct-fKTqjPip9ZMesX-2023-khd2992b2e6156
+                          court_id: uc-dc-superct-fKTqjPip9ZMesX
+                          title: 'In Re: Castina Kennedy'
+                          case_number: 2023-ADM-001552
+                          date_filed: '2023-12-29'
+                        - id: c-uc-de-jpct-Drp6mNyj22xQUE-2021-lc2d51dbc597a9
+                          court_id: uc-de-jpct-Drp6mNyj22xQUE
+                          title: TIDALHEALTH NANTICOKE VS BRIAN C KENNEDY -NON JURY TRIAL
+                          case_number: JP17-21-003667
+                          date_filed: '2021-09-02'
+                        - id: c-uc-de-superct-nUM6FRQhJp5oVt-2023-lc1c8e02f78d5b
+                          court_id: uc-de-superct-nUM6FRQhJp5oVt
+                          title: STATE OF DELAWARE VS MARK E KENNEDY SR
+                          case_number: K23J-01288
+                          date_filed: '2023-12-18'
+                        - id: c-uc-fl-circt-AcBsxBLXLVESzg-2018-ce9ef90c969f8f
+                          court_id: uc-fl-circt-AcBsxBLXLVESzg
+                          title: US BANK VS DENISE R GARRISON
+                          case_number: 05-2018-CA-017475-XX
+                          date_filed: '2018-02-26'
+                        - id: c-uc-fl-circt-XMv4ET4GWdA9Th-2023-ewe4e514df2038
+                          court_id: uc-fl-circt-XMv4ET4GWdA9Th
+                          title: 'KENNEDY, THOMAS -VS- SANTA FE TRACE APARTMENTS et al'
+                          case_number: 01 2023 CA 002211
+                          date_filed: '2023-04-04'
+                        - id: c-uc-fl-cntyct-49URUUonHiobdf-2021-dgf8f07aa5a809
+                          court_id: uc-fl-cntyct-49URUUonHiobdf
+                          title: 'HOLLAND M. WARE CHARITABLE FOU, KENNEDY, MATTHEW A Et Al'
+                          case_number: 392021CP000053CPAXMX
+                          date_filed: '2021-09-16'
+                        - id: c-uc-fl-cntyct-kEg5dXwj3tkV75-2024-by4325686eb632
+                          court_id: uc-fl-cntyct-kEg5dXwj3tkV75
+                          title: 555 NE 8th Street LLC Plaintiff vs. Kevon Kennedy Defendant
+                          case_number: COSO24002517
+                          date_filed: '2024-01-15'
+                        - id: c-uc-fl-ctapp-gjMaBgXtbWbE6o-2022-kwfdbccbac7a6a
+                          court_id: uc-fl-ctapp-gjMaBgXtbWbE6o
+                          title: MATTHEW AARON KENNEDY vs. STATE OF FLORIDA
+                          case_number: 6D23-383
+                          date_filed: '2022-04-06'
+                        - id: c-uc-fl-supct-WhRuuZsKDDmBgY-2023-kx6c3c5495c02c
+                          court_id: uc-fl-supct-WhRuuZsKDDmBgY
+                          title: 'Matthew Aaron Kennedy, Petitioner(s) v. State of Florida, Respondent(s)'
+                          case_number: SC2023-1380
+                          date_filed: '2023-10-06'
+                        - id: c-uc-ia-ctapp-B4ccZ7bJyGJWGg-2023-mn728ae6818b4b
+                          court_id: uc-ia-ctapp-B4ccZ7bJyGJWGg
+                          title: 'GARY BOWERS, KEITH BROWN, EDWARD CUSIC, MICHAEL LOVE, MICHAEL MILLER, JERRY NEWELL, ARTHUR RUTLEDGE, LARRY STEEN, CHAD WELSH, CLARENCE FENTON, RALPH SAGER, JAMES MCCURDY, LARY MORGAN, KHAMFEUANG THONGVANH, LARRY KENNEDY, Plaintiffs-Appellants/Cross-A'
+                          case_number: 23-1408
+                          date_filed: '2023-08-25'
+                        - id: c-uc-il-circt-S5vXsc4GsDAk5P-2023-if347df20ab012
+                          court_id: uc-il-circt-S5vXsc4GsDAk5P
+                          title: 'BAYSHORE PARK RIDGE COMMON VS KENNEDY, KELLEY Et Al'
+                          case_number: 2023-M2-001196
+                          date_filed: '2023-04-04'
+                        - id: c-uc-in-ctapp-bVcb4puMyAJrn4-2018-fqe81a93bcc870
+                          court_id: uc-in-ctapp-bVcb4puMyAJrn4
+                          title: Christopher R Glock Md v. Rickey D Kennedy
+                          case_number: 18A-CT-02486
+                          date_filed: '2018-10-15'
+                        - id: c-uc-in-ctyct-VEej7MWrWe8Fm6-2019-fm07848f9d2d5c
+                          court_id: uc-in-ctyct-VEej7MWrWe8Fm6
+                          title: City Of Greenwood v. JASON A KENNEDY
+                          case_number: 41H02-1910-OV-002628
+                          date_filed: '2019-10-03'
+                        - id: c-uc-in-sclmsct-iUaXU3Qc8QHdfm-2019-fi08174980270c
+                          court_id: uc-in-sclmsct-iUaXU3Qc8QHdfm
+                          title: 'THE FORT APARTMENTS BY ACKERMANN ENTERPRISES, INC AS MANAGING AGENT v.Ryan Kennedy'
+                          case_number: 49K03-1909-SC-004049
+                          date_filed: '2019-09-17'
+                        - id: c-uc-in-supct-cEAaPCzikrkHjZ-2017-fq7500d20d9274
+                          court_id: uc-in-supct-cEAaPCzikrkHjZ
+                          title: Temporary Admission of Danielle T. Kennedy and Todd L. Padnos
+                          case_number: 94S00-1707-MS-00450
+                          date_filed: '2017-07-07'
+                        - id: c-uc-ma-appct-J4kNAkYZTefm8x-2023-kqc6e0d948fb4b
+                          court_id: uc-ma-appct-J4kNAkYZTefm8x
+                          title: COMMONWEALTH vs. CHRISTY L. KENNEDY
+                          case_number: 2023-P-1219
+                          date_filed: '2023-10-23'
+                        - id: c-uc-ma-distct-XGF6siuwS5qhxL-2023-kmf4b9493fd92b
+                          court_id: uc-ma-distct-XGF6siuwS5qhxL
+                          title: 'Commonwealth vs. De Oliveira Pena, Kennedy'
+                          case_number: 2336CR001207
+                          date_filed: '2023-07-17'
+                        - id: c-uc-ma-lct-UQHjx5jPLMFkQZ-2023-klabcf5ca4452f
+                          court_id: uc-ma-lct-UQHjx5jPLMFkQZ
+                          title: 'Kennedy, David v.'
+                          case_number: 23 SBQ 03175 11 - 00
+                          date_filed: '2023-11-20'
+                        - id: c-uc-ma-probfamct-nCgdw5h6972Pv3-2023-kl78a7e6ab1f23
+                          court_id: uc-ma-probfamct-nCgdw5h6972Pv3
+                          title: 'In the matter of: Kennedy, Paulette Gail'
+                          case_number: PL23P2053EA
+                          date_filed: '2023-09-11'
+                        - id: c-uc-md-circt-YcsCmYbetSpzRu-2023-lo1059b184e200
+                          court_id: uc-md-circt-YcsCmYbetSpzRu
+                          title: Kurtisha Ellis vs. Kennedy Simms
+                          case_number: C-21-FM-23-001882
+                          date_filed: '2023-12-26'
+                        - id: c-uc-md-distct-YY3kXD5s8TwPRk-2023-lo92abf53658f6
+                          court_id: uc-md-distct-YY3kXD5s8TwPRk
+                          title: 'Portfolio Recovery Associates, LLC vs. Katina Kennedy'
+                          case_number: D-101-CV-23-011664
+                          date_filed: '2023-11-30'
+                        - id: c-uc-mn-ctapp-889if6JPzs8Cgo-2023-mce339f72d5c92
+                          court_id: uc-mn-ctapp-889if6JPzs8Cgo
+                          title: 'Maurice Clarence Killingham, Respondent, vs. Sey Pee Kennedy, Appellant.'
+                          case_number: A23-0899
+                          date_filed: '2023-06-20'
+                        - id: c-uc-mn-distct-jYQQfnCwv3wrYs-2023-mqc494b1cd0c55
+                          court_id: uc-mn-distct-jYQQfnCwv3wrYs
+                          title: 'In re the Estate of Peggy Ann Cherry Kennedy, Deceased'
+                          case_number: 56-PR-23-2727
+                          date_filed: '2023-12-01'
+                        - id: c-uc-mo-circt-9D7GAKsjjhM5Zn-2023-kua0e4ea0e6a2f
+                          court_id: uc-mo-circt-9D7GAKsjjhM5Zn
+                          title: WORCESTER COMMUNITIES A V KENNEDY RICHARDSON ET AL
+                          case_number: 2316-CV22938
+                          date_filed: '2023-08-28'
+                        - id: c-uc-mo-circt-cj9fXkxeQE8rzj-2023-ku05dc19881ad1
+                          court_id: uc-mo-circt-cj9fXkxeQE8rzj
+                          title: IN RE HOLLY R KENNEDY
+                          case_number: 23JE-CC01107
+                          date_filed: '2023-11-09'
+                        - id: c-uc-mo-ctapp-3DT4oHa9rhdPXW-2023-ku51fea3a0aa8c
+                          court_id: uc-mo-ctapp-3DT4oHa9rhdPXW
+                          title: 'STATE OF MO, RES V KENNEDY JONES, APLP'
+                          case_number: WD86813
+                          date_filed: '2023-12-19'
+                        - id: c-uc-mo-supct-ZP7aUQqntV2dUc-2022-ku69e139395bbe
+                          court_id: uc-mo-supct-ZP7aUQqntV2dUc
+                          title: 'KENNEDY JONES, APP V LEATH & SONS, INC, RES'
+                          case_number: SC99771
+                          date_filed: '2022-09-13'
+                        - id: c-uc-nj-superct-AnFwnZYynbXnKv-2023-ly893feb5a18e8
+                          court_id: uc-nj-superct-AnFwnZYynbXnKv
+                          title: 'Abreu Angel Vs On Target Staffing, Llc'
+                          case_number: MID L 003735 - 23
+                          date_filed: '2023-07-05'
+                        - id: c-uc-nj-superct-EddTYVGwE9EttP-2023-lyb26f4d73933f
+                          court_id: uc-nj-superct-EddTYVGwE9EttP
+                          title: Hackensack Radiology Vs Everett Kennedy
+                          case_number: PAS DC 012037 - 23
+                          date_filed: '2023-12-14'
+                        - id: c-uc-nj-superct-YXacnEkpaoXvMZ-2024-ly341b08b2b874
+                          court_id: uc-nj-superct-YXacnEkpaoXvMZ
+                          title: Kim Vs Lekch Llc
+                          case_number: HUD C 000011 - 24
+                          date_filed: '2024-01-26'
+                        - id: c-uc-nj-taxct-c9JNod3G2jpsQV-2023-maa310cf6d574d
+                          court_id: uc-nj-taxct-c9JNod3G2jpsQV
+                          title: Kennedy Blvd. Assoc.c/o Grenadi V Jersey City
+                          case_number: 010047 - 2023
+                          date_filed: '2023-10-12'
+                        - id: c-uc-nm-distct-GyEfcfYHTUKKFa-2019-nf015e7675e21b
+                          court_id: uc-nm-distct-GyEfcfYHTUKKFa
+                          title: 'Jack W. Kennedy, et. al., v. Claudio L. Terrazas, et. al.'
+                          case_number: D-728-CV-201900022
+                          date_filed: '2019-08-07'
+                        - id: c-uc-nm-magct-GhsiNLTwgjxJKL-2019-nf72b16b63aadf
+                          court_id: uc-nm-magct-GhsiNLTwgjxJKL
+                          title: 'Collection Resources, Inc, Plaintiff(s) v. Brittany Kennedy, Defendant(s)'
+                          case_number: M-44-CV-201900107
+                          date_filed: '2019-09-17'
+                        - id: c-uc-nm-mct-MjNdneN8digr8D-2023-ng822544d0ae29
+                          court_id: uc-nm-mct-MjNdneN8digr8D
+                          title: State of New Mexico vs. MICAH KENNEDY
+                          case_number: T-4-TR-2023019669
+                          date_filed: '2023-12-16'
+                        - id: c-uc-nm-supct-7b9FiLzz8UsiJx-2017-nf59fdff0193c3
+                          court_id: uc-nm-supct-7b9FiLzz8UsiJx
+                          title: Matter of Kennedy
+                          case_number: S-1-SC-36702
+                          date_filed: '2017-10-16'
+                        - id: c-uc-nv-distct-Sh3yx5bzoH6vAX-2023-fwf7033e58e840
+                          court_id: uc-nv-distct-Sh3yx5bzoH6vAX
+                          title: 'Filing of the Will of: Jane Kennedy'
+                          case_number: W-23-027131
+                          date_filed: '2023-12-13'
+                        - id: c-uc-nv-distct-Sh3yx5bzoH6vAX-2024-fw80f25352ca42
+                          court_id: uc-nv-distct-Sh3yx5bzoH6vAX
+                          title: 'GBP Capital, LLC, Plaintiff(s) vs. Joseph Kennedy, Defendant(s)'
+                          case_number: A-24-888126-C
+                          date_filed: '2024-02-29'
+                        - id: c-uc-nv-distct-Sh3yx5bzoH6vAX-2024-fw88715fd56ede
+                          court_id: uc-nv-distct-Sh3yx5bzoH6vAX
+                          title: 'Marcus Gibbs, Plaintiff(s) vs. Wynn Las Vegas, LLC, Defendant(s)'
+                          case_number: A-24-892232-C
+                          date_filed: '2024-04-29'
+                        - id: c-uc-nv-jct-S4PpvLoedSrwxn-2023-fv0eff87643f00
+                          court_id: uc-nv-jct-S4PpvLoedSrwxn
+                          title: 'Showboat Park, Landlord(s) vs. Kennedy Queen Livingston Lopez, Brooklyn Livingston lopez, Tenant(s)'
+                          case_number: '23E047062'
+                          date_filed: '2023-12-28'
+                        - id: c-uc-ny-ctyct-6M7Mb3cHMarXWB-2022-fy89299f8e3d26
+                          court_id: uc-ny-ctyct-6M7Mb3cHMarXWB
+                          title: 'Roman Stone Properties LLC vs. Kennedy, Jennifer Kennedy, John, And other occupants'
+                          case_number: LT-000024-22/TO
+                          date_filed: '2022-03-28'
+                        - id: c-uc-ny-ctycvct-bZNrjqUQxurxfD-2022-fybedc1e4f2cd9
+                          court_id: uc-ny-ctycvct-bZNrjqUQxurxfD
+                          title: 'RIGHT CHOICE SUPPLY, INC., AAO Tiffany Kennedy vs. Liberty Mutual Insurance Company'
+                          case_number: CV-728383-22/RI
+                          date_filed: '2022-12-12'
+                        - id: c-uc-ny-distct-VxRmdByMvAgyaF-2023-fy1a510c9204f8
+                          court_id: uc-ny-distct-VxRmdByMvAgyaF
+                          title: 'LONG ISLAND RECOVERY INC., As Assignee Of James Kennedy vs. TRAVELERS PROPERTY CASUALTY INSURANCE COMPANY'
+                          case_number: CV-003492-23/HU
+                          date_filed: '2023-03-27'
+                        - id: c-uc-ny-supct-6srsjvSmWdkDmF-2023-gg1e900a75cbcd
+                          court_id: uc-ny-supct-6srsjvSmWdkDmF
+                          title: 'In the Matter of the Application of Samantha Eve Kennedy, Petitioner. Petition for Leave to Change her Name to: Tink Kennedy'
+                          case_number: EF2023-275418
+                          date_filed: '2023-11-15'
+                        - id: c-uc-oh-br-mK4WwS9W6vfBra-2013-mjf683512b9cd9
+                          court_id: uc-oh-br-mK4WwS9W6vfBra
+                          title: 'TREASURER OF CUYAHOGA COUNTY, OHIO vs. ELIZABETH KENNEDY, ET AL'
+                          case_number: BR-13-007685
+                          date_filed: '2013-11-27'
+                        - id: c-uc-oh-ctcp-LFV6sB9HV7xsWx-2001-mj498e76bd19bc
+                          court_id: uc-oh-ctcp-LFV6sB9HV7xsWx
+                          title: GREGORY KENNEDY ET AL vs. ENTERTAINMENT USA OF CLEVELAND INC ETC ET AL
+                          case_number: CV-01-435705
+                          date_filed: '2001-04-16'
+                        - id: c-uc-oh-munict-mWZRDoor7DdeVX-2017-mk9a4eca12b06d
+                          court_id: uc-oh-munict-mWZRDoor7DdeVX
+                          title: THE STATE OF OHIO vs. KENNETH A KENNEDY
+                          case_number: CR-17-620884-A
+                          date_filed: '2017-08-28'
+                        - id: c-uc-ok-ctcrimapp-VNuVNCZGiidwCL-2023-iv45de54f112e2
+                          court_id: uc-ok-ctcrimapp-VNuVNCZGiidwCL
+                          title: 'Aaron Tyrone Kennedy, Petitioner, v. Warden Jim Farris, Respondent,'
+                          case_number: HC-2023-318
+                          date_filed: '2023-04-10'
+                        - id: c-uc-ok-ctcvapp-7fzuJEfCebgZW6-2018-iv17bed5cfc2a5
+                          court_id: uc-ok-ctcvapp-7fzuJEfCebgZW6
+                          title: 'In Re the Marriage of: Brenda Kennedy, Petitioner/Appellee, vs Jackie Kennedy, Respondent/Appellant.'
+                          case_number: DF-117543
+                          date_filed: '2018-11-20'
+                        - id: c-uc-ok-ctcvapp-7fzuJEfCebgZW6-2024-ivccf5988475ec
+                          court_id: uc-ok-ctcvapp-7fzuJEfCebgZW6
+                          title: 'Mark A. Pendergraft, an individual, Plaintiff/Appellant, vs. Kelly Meredith-McCann, aka Kelly Williams, an individual, Defendant/Appellee.'
+                          case_number: SD-121931
+                          date_filed: '2024-01-31'
+                        - id: c-uc-ok-distct-2ZyiebMgRB2egd-2023-ij10d69129518f
+                          court_id: uc-ok-distct-2ZyiebMgRB2egd
+                          title: 'KENNEDY-STEWART, SHEILA RAYE et al vs. STANSBURY, TAMMY LYNN et al'
+                          case_number: CV-2023-00041
+                          date_filed: '2023-06-22'
+                        - id: c-uc-ok-supct-eLPjCsVtTcxWnD-2021-iv326d06f5c224
+                          court_id: uc-ok-supct-eLPjCsVtTcxWnD
+                          title: 'Michael Dickenson Jr., Plaintiff/Appellee, vs Terrecia Kennedy, Defendant/Appellant.'
+                          case_number: DF-119987
+                          date_filed: '2021-11-08'
+                        - id: c-uc-or-circt-iKYaYBe5zrJJPY-2023-mwa512b4a0b3e1
+                          court_id: uc-or-circt-iKYaYBe5zrJJPY
+                          title: Commercial Adjustment Co vs Logan Kennedy
+                          case_number: 23SC24733
+                          date_filed: '2023-08-23'
+                        - id: c-uc-sc-circt-Hrx665CTgkhMuh-2020-hib4f318d166c6
+                          court_id: uc-sc-circt-Hrx665CTgkhMuh
+                          title: The State of South Carolina VS Kennan Edward Kennedy
+                          case_number: 2020A3810700380
+                          date_filed: '2020-06-16'
+                        - id: c-uc-tx-cntyct-9m8tuUi4TrtmaR-2013-hyebf044fec686
+                          court_id: uc-tx-cntyct-9m8tuUi4TrtmaR
+                          title: PROGRESSIVE COUNTY MUTUAL INS CO VS. WILLIAM TELLER
+                          case_number: '1028037'
+                          date_filed: '2013-02-21'
+                        - id: c-uc-tx-cntyct-9m8tuUi4TrtmaR-2023-hy40e0b0d1d984
+                          court_id: uc-tx-cntyct-9m8tuUi4TrtmaR
+                          title: 'GLOBAL STRUDENT HOUSING-HOUSTON LLC VS KENNEDY PRICE,ALL OTHER OCCUPANTS'
+                          case_number: '1218444'
+                          date_filed: '2023-12-27'
+                        - id: c-uc-tx-cntyct-9m8tuUi4TrtmaR-2024-hy0096a1dc1670
+                          court_id: uc-tx-cntyct-9m8tuUi4TrtmaR
+                          title: 'POST PROVIDENCE LLC VS ALICIA KENNEDY,CARNELL MOSLEY,ALL OCCUPANTS'
+                          case_number: '1222004'
+                          date_filed: '2024-02-20'
+                        - id: c-uc-tx-distct-6LaaGbX2qPRryA-2019-hzcc3574772788
+                          court_id: uc-tx-distct-6LaaGbX2qPRryA
+                          title: 'RODMAN, REGINA (M D) vs. LYOS, ANDREW (M D)'
+                          case_number: '201980811'
+                          date_filed: '2019-11-06'
+                        - id: c-uc-tx-distct-6LaaGbX2qPRryA-2020-hz2f0aeb7bb8ff
+                          court_id: uc-tx-distct-6LaaGbX2qPRryA
+                          title: 'MITCHELL, ASHLEY vs. MEMORIAL HERMANN HEALTHCARE SYSTEM (D/B/A MEMORIAL'
+                          case_number: '202033985'
+                          date_filed: '2020-06-05'
+                        - id: c-uc-tx-distct-6LaaGbX2qPRryA-2023-hz9a1c062b0125
+                          court_id: uc-tx-distct-6LaaGbX2qPRryA
+                          title: 'ACOSTA, YUMILA REYES vs. EXXONMOBIL PIPELINE COMPANY, LLC'
+                          case_number: '202377730'
+                          date_filed: '2023-11-07'
+                        - id: c-uc-tx-distct-6LaaGbX2qPRryA-2023-hzdc58d93be235
+                          court_id: uc-tx-distct-6LaaGbX2qPRryA
+                          title: 'KENNEDY, JACKIE vs. CENTERPOINT ENERGY INC'
+                          case_number: '202388017'
+                          date_filed: '2023-12-27'
+                        - id: c-uc-va-gendistct-CVvLQNgDQJEsDn-2022-jx71892a7a44a6
+                          court_id: uc-va-gendistct-CVvLQNgDQJEsDn
+                          title: 'BLUEWATER PROPERTIES LLC, LESSOR VS GUE, KENNEDY B Et Al'
+                          case_number: GV22000485-00
+                          date_filed: '2022-10-21'
+                        - id: c-uc-wa-munict-7LCZvJdnTcEEcn-2023-lic9581e6c55fa
+                          court_id: uc-wa-munict-7LCZvJdnTcEEcn
+                          title: 'THE CITY OF SEATTLE vs KENNEDY, LYMAN TATE'
+                          case_number: '664285'
+                          date_filed: '2023-10-02'
+                        - id: c-uc-wa-superct-Sp8uTsLH3U9jDc-2021-le716f98526678
+                          court_id: uc-wa-superct-Sp8uTsLH3U9jDc
+                          title: RAO VS ZIEGLER
+                          case_number: 21-3-03992-8 SEA
+                          date_filed: '2021-08-06'
+                        - id: c-uc-wi-circt-2jhgkY7hGFRz8z-2023-jl12d823d530a1
+                          court_id: uc-wi-circt-2jhgkY7hGFRz8z
+                          title: State of Wisconsin vs. Dee Diane Kennedy
+                          case_number: 2023CM000222
+                          date_filed: '2023-10-30'
+                        - id: ca1-2020-02140
+                          court_id: ca1
+                          title: 'Clopper v. Harvard University, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca1-2021-01085
+                          court_id: ca1
+                          title: 'Widi v. Federal Bureau of Prisons, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca10-2021-01185
+                          court_id: ca10
+                          title: 'Smith, et al v. Aliera Companies, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca11-2018-10541
+                          court_id: ca11
+                          title: 'CTR For Biological Diversity, et al v. U.S. Army Corps of Engineers, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca11-2023-11410
+                          court_id: ca11
+                          title: 'London Bouvier v. Starr Smith, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2017-02981
+                          court_id: ca2
+                          title: Abreu v. Travers
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2019-02979
+                          court_id: ca2
+                          title: 'Sonterra Capital Master Fund, v. Barclays Bank PLC'
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2021-00668
+                          court_id: ca2
+                          title: Abromavage v. Deutsche Bank Securities Inc.
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2021-06283
+                          court_id: ca2
+                          title: Giron Perez v. Garland
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2023-01281
+                          court_id: ca2
+                          title: 'Kafka v. Wells Fargo Securities, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2023-07401
+                          court_id: ca2
+                          title: B. B. v. Hochul
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2023-07444
+                          court_id: ca2
+                          title: 'EBIN New York, Inc. v. SIC Enterprise, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: ca2-2023-07798
+                          court_id: ca2
+                          title: Mehrotra v. United States Department of Labor
+                          case_number: null
+                          date_filed: null
+                        - id: ca3-2019-01088
+                          court_id: ca3
+                          title: 'In re: Processed Egg Products'
+                          case_number: null
+                          date_filed: null
+                        - id: ca4-2018-01366
+                          court_id: ca4
+                          title: J. Gilliam v. Kenneth Sealey
+                          case_number: null
+                          date_filed: null
+                        - id: ca5-2018-11206
+                          court_id: ca5
+                          title: 'Margaret Budde v. Global Power Equip Group, Inc., et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca5-2021-60089
+                          court_id: ca5
+                          title: Huawei Technol USA v. FCC
+                          case_number: null
+                          date_filed: null
+                        - id: ca6-2020-06308
+                          court_id: ca6
+                          title: 'Joseph Hicks v. Richard Smith, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca7-2020-02672
+                          court_id: ca7
+                          title: 'Grant Birchmeier, et al v. Berkley Group, Incorporated'
+                          case_number: null
+                          date_filed: null
+                        - id: ca7-2020-03021
+                          court_id: ca7
+                          title: 'Laura Mullen v. GLV, Inc., et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca8-2022-01048
+                          court_id: ca8
+                          title: 'Johnny Smith, et al v. 3M Company, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca8-2023-02551
+                          court_id: ca8
+                          title: Douglas Kelley v. BMO Harris Bank N.A.
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2009-56344
+                          court_id: ca9
+                          title: 'Anthony Dawkins v. Jeanne Woodford, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2015-72788
+                          court_id: ca9
+                          title: 'Friends of the Columbia Gorge, et al v. Bpa'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2018-15402
+                          court_id: ca9
+                          title: 'LN Management, LLC Series 5664 v. JPMorgan Chase Bank'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2020-72432
+                          court_id: ca9
+                          title: California State Water Resourc v. FERC
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2020-73819
+                          court_id: ca9
+                          title: 'George Mersho, et al v. USDC-AZP'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2022-55522
+                          court_id: ca9
+                          title: 'Ariana Miles v. Kirkland''s Stores, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2023-03787
+                          court_id: ca9
+                          title: 'Matsumoto, et al. v. Labrador'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2023-15632
+                          court_id: ca9
+                          title: 'Aaron Senne, et al v. Office of the Commissioner of Baseball, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2024-00094
+                          court_id: ca9
+                          title: 'Crossley v. United States District Court for the Central District of California, Riverside'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2024-01645
+                          court_id: ca9
+                          title: 'Jones v. Starz Entertainment, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2024-02355
+                          court_id: ca9
+                          title: PayServices Bank v. Federal Reserve Bank of San Francisco
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2024-02899
+                          court_id: ca9
+                          title: Dodge v. O'Malley
+                          case_number: null
+                          date_filed: null
+                        - id: ca9-2024-05688
+                          court_id: ca9
+                          title: Romkema v. O'Malley
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacb-2:2008-bk-31745'
+                          court_id: cacb
+                          title: Alena Internet Corporation
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-2:2018-cv-01415'
+                          court_id: cacd
+                          title: 'Joseph Fenity v. CBS/CTS, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-2:2018-ml-02814'
+                          court_id: cacd
+                          title: In re Ford Motor Co. DPS6 Powershift Transmission Products Liability Litigation
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-2:2020-cv-01489'
+                          court_id: cacd
+                          title: Luis Marquez v. Alpha Beta Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-2:2020-cv-04677'
+                          court_id: cacd
+                          title: Lacresha Bogle v. Ford Motor Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-2:2021-cr-00085-812479'
+                          court_id: cacd
+                          title: USA v. Rodriguez-Ureta
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-2:2021-cv-00872'
+                          court_id: cacd
+                          title: Phillip Lunn et al v. City of Los Angeles
+                          case_number: null
+                          date_filed: '2021-01-29'
+                        - id: 'cacd-2:2022-cv-06645'
+                          court_id: cacd
+                          title: Kenneth Jamaca v. American Express et al
+                          case_number: null
+                          date_filed: '2022-09-16'
+                        - id: 'cacd-5:2021-cr-00085-816864'
+                          court_id: cacd
+                          title: USA v. Tran
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-5:2023-cv-01472'
+                          court_id: cacd
+                          title: 'Elizabeth Shutters, Inc. v. Sego Automation LLC et al'
+                          case_number: null
+                          date_filed: '2023-07-26'
+                        - id: 'cacd-8:2017-cv-01887'
+                          court_id: cacd
+                          title: Alternate Health USA Inc. et al v. Paul Edalat
+                          case_number: null
+                          date_filed: null
+                        - id: 'cacd-8:2021-mc-00012'
+                          court_id: cacd
+                          title: 'In re: Subpoena Mitek Systems, Inc.'
+                          case_number: null
+                          date_filed: '2021-03-22'
+                        - id: cadc-2020-05381
+                          court_id: cadc
+                          title: 'TikTok Inc., et al v. Joseph Biden, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: cadc-2023-07056
+                          court_id: cadc
+                          title: 'Lincoln Holdings LLC, et al v. Factory Mutual Insurance Company'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-1:2012-cv-01033'
+                          court_id: caed
+                          title: Ortiz v. Georgia Pacific
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-1:2014-cv-00797'
+                          court_id: caed
+                          title: 'Sanchez v. Frito-Lay, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-1:2021-cv-01766'
+                          court_id: caed
+                          title: J.M. v. Tulare City School District
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2009-cv-01145'
+                          court_id: caed
+                          title: 'Albee v. Continental Tire North America, et al.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2014-cv-00217'
+                          court_id: caed
+                          title: Johnson v. Lanza
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2015-cv-00147'
+                          court_id: caed
+                          title: 'Johnson v. Sammy''s Restaurant, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2016-cv-00465'
+                          court_id: caed
+                          title: '(ps)johnson v. Vien, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2016-cv-01216'
+                          court_id: caed
+                          title: (BK) McFarland v. Battle Creek State Bank et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2019-cv-02140'
+                          court_id: caed
+                          title: Securities and Exchange Commission v. Bayliss et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2020-cv-02400'
+                          court_id: caed
+                          title: Schmidt v. Vision Service Plan et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2021-cv-01997'
+                          court_id: caed
+                          title: 'Hall v. Smosh Dot Com, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2022-cv-00295'
+                          court_id: caed
+                          title: (SS) Green v. Commissioner of Social Security
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2023-at-00063'
+                          court_id: caed
+                          title: 'Patterson v. Sazerac Company, Inc.'
+                          case_number: null
+                          date_filed: '2023-01-24'
+                        - id: 'caed-2:2023-cv-00150'
+                          court_id: caed
+                          title: 'Patterson v. Sazerac Co., Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'caed-2:2024-cv-01710'
+                          court_id: caed
+                          title: 'Nelson v. Amazon.com, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: cafc-2023-01639
+                          court_id: cafc
+                          title: United Services Automobile Association v. PNC Bank N.A.
+                          case_number: null
+                          date_filed: null
+                        - id: cafc-2023-01687
+                          court_id: cafc
+                          title: 'Mitek Systems, Inc. v. United Services Automobile Association'
+                          case_number: null
+                          date_filed: null
+                        - id: cafc-2023-01778
+                          court_id: cafc
+                          title: United Services Automobile Association v. PNC Bank N.A.
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2017-cv-00939'
+                          court_id: cand
+                          title: 'Waymo LLC v. Uber Technologies, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2017-cv-04803'
+                          court_id: cand
+                          title: 'Atari Interactive, Inc. v. Nestle, Sa et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2019-md-02913'
+                          court_id: cand
+                          title: 'In re: Juul Labs, Inc., Marketing, Sales Practices, and Products Liability Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2020-cv-04677'
+                          court_id: cand
+                          title: 'Broadcom Corporation et al v. Netflix, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2020-cv-08757'
+                          court_id: cand
+                          title: 'Andrews v. Juul Labs, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2021-cv-01418'
+                          court_id: cand
+                          title: Brooks et al v. Thomson Reuters Corporation
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2021-cv-09751'
+                          court_id: cand
+                          title: 'Miller et al v. Travel Guard Group, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-3:2022-cv-01065'
+                          court_id: cand
+                          title: 'Black River Local Schools v. Juul Labs, Inc. et al'
+                          case_number: null
+                          date_filed: '2022-02-21'
+                        - id: 'cand-3:2023-cv-02072'
+                          court_id: cand
+                          title: Roberts et al v. Avocado Mattress L.L.C.
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-4:2010-cv-01993'
+                          court_id: cand
+                          title: 'Rainbow Business Solutions et al v. Merchant Services, Inc et al'
+                          case_number: '4:2010-cv-01993'
+                          date_filed: null
+                        - id: 'cand-4:2022-cv-04775'
+                          court_id: cand
+                          title: Starratt et al v. Immedia Semiconductor LLC et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-4:2024-cv-02142'
+                          court_id: cand
+                          title: Watson v. National Gypsum Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-5:2013-cv-03999'
+                          court_id: cand
+                          title: 'Finjan, Inc. v. Blue Coat Systems, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cand-5:2013-cv-04201'
+                          court_id: cand
+                          title: 'Evolutionary Intelligence, LLC v. Apple Inc.'
+                          case_number: '5:2013-cv-04201'
+                          date_filed: null
+                        - id: 'cit-1:2022-cv-00299'
+                          court_id: cit
+                          title: '1:22-cv-00299'
+                          case_number: null
+                          date_filed: '2022-10-12'
+                        - id: 'cod-1:2008-cv-00928'
+                          court_id: cod
+                          title: 'HBN, Inc. v. Kline et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2018-cv-00718'
+                          court_id: cod
+                          title: Barnes v. Security Life of Denver Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2018-cv-01812'
+                          court_id: cod
+                          title: 'P2BInvestor, Incorporated v. Home Depot U.S.A., Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2018-cv-03190'
+                          court_id: cod
+                          title: 'O''Connor et al v. BMW of North America, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2019-cv-01149'
+                          court_id: cod
+                          title: Zlozower v. Your Edm LLC
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2019-cv-02680'
+                          court_id: cod
+                          title: 'Weston Educational, Inc. et al v. Weston et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2019-cv-02705'
+                          court_id: cod
+                          title: 'Luciano v. Giving Tree of Denver, LLC, the'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2020-cv-01691'
+                          court_id: cod
+                          title: Simpson v. Alterra Mountain Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2021-cv-00097'
+                          court_id: cod
+                          title: 'Sagome, Inc. v. Cincinnati Insurance Company, the'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2021-cv-01543'
+                          court_id: cod
+                          title: 'Davis v. Prudential Insurance Company of America, the'
+                          case_number: null
+                          date_filed: null
+                        - id: 'cod-1:2022-cv-03287'
+                          court_id: cod
+                          title: Stanisavljevic v. Travelers Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'cofc-1:2017-vv-01817'
+                          court_id: cofc
+                          title: Vazquez et al v. Secretary of Health and Human Services
+                          case_number: null
+                          date_filed: null
+                        - id: 'cofc-1:2020-vv-01058'
+                          court_id: cofc
+                          title: Brantley-Karasinski v. Secretary of Health and Human Services
+                          case_number: null
+                          date_filed: null
+                        - id: 'ctd-3:2017-cv-01381'
+                          court_id: ctd
+                          title: 'Patane et al v. Nestle Waters North America, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'dcd-1:2012-cv-00042'
+                          court_id: dcd
+                          title: Spencer et al v. Islamic Republic of Iran
+                          case_number: null
+                          date_filed: null
+                        - id: 'dcd-1:2020-cv-02167'
+                          court_id: dcd
+                          title: Cherokee Nation et al v. United States Department of Interior et al
+                          case_number: null
+                          date_filed: '2020-08-07'
+                        - id: 'dcd-1:2021-cr-00085-227167'
+                          court_id: dcd
+                          title: USA v. STRAND et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'deb-1:2017-bk-12307'
+                          court_id: deb
+                          title: M & G USA Corporation
+                          case_number: null
+                          date_filed: null
+                        - id: 'deb-1:2018-bk-10248'
+                          court_id: deb
+                          title: 'The Bon-Ton Stores, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ded-1:2018-cv-01359'
+                          court_id: ded
+                          title: 'Intuitive Surgical, Inc. et al v. Auris Health, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'flmd-8:2023-cv-00274'
+                          court_id: flmd
+                          title: 'Byam-Hunte v. ClearStar, Inc. et al'
+                          case_number: null
+                          date_filed: '2023-02-08'
+                        - id: 'flnd-3:2016-md-02734'
+                          court_id: flnd
+                          title: 'IN RE: ABILIFY (ARIPIPRAZOLE) PRODUCTS LIABILITY LITIGATION'
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00561'
+                          court_id: flnd
+                          title: Cure-Manuel v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00601'
+                          court_id: flnd
+                          title: Juneau v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00603'
+                          court_id: flnd
+                          title: Lawson v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00604'
+                          court_id: flnd
+                          title: Marks v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00620'
+                          court_id: flnd
+                          title: Thomas v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00622'
+                          court_id: flnd
+                          title: Woods v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00626'
+                          court_id: flnd
+                          title: Joseph v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00627'
+                          court_id: flnd
+                          title: Laborde v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00767'
+                          court_id: flnd
+                          title: Goff et al v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00769'
+                          court_id: flnd
+                          title: Akin v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00771'
+                          court_id: flnd
+                          title: Jones v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00772'
+                          court_id: flnd
+                          title: Butler v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00874'
+                          court_id: flnd
+                          title: Trujillo v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00894'
+                          court_id: flnd
+                          title: Darden v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2017-cv-00899'
+                          court_id: flnd
+                          title: Robinson v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00114'
+                          court_id: flnd
+                          title: Martin v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00115'
+                          court_id: flnd
+                          title: Rose v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00118'
+                          court_id: flnd
+                          title: Outlaw v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00171'
+                          court_id: flnd
+                          title: Braxton v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00175'
+                          court_id: flnd
+                          title: Dunlap v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00177'
+                          court_id: flnd
+                          title: Macko v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00216'
+                          court_id: flnd
+                          title: Rawlins v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00247'
+                          court_id: flnd
+                          title: Wofford v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00547'
+                          court_id: flnd
+                          title: Brooks v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-00549'
+                          court_id: flnd
+                          title: Kelly v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-01327'
+                          court_id: flnd
+                          title: Breeze et al v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-01406'
+                          court_id: flnd
+                          title: Adeniran et al v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-01465'
+                          court_id: flnd
+                          title: Behrman v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-01781'
+                          court_id: flnd
+                          title: Pittman v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-02060'
+                          court_id: flnd
+                          title: Adams et al v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-02064'
+                          court_id: flnd
+                          title: Earp et al v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2018-cv-02066'
+                          court_id: flnd
+                          title: Alford et al v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2019-cv-00504'
+                          court_id: flnd
+                          title: Romero v. Bristol-Myers Squibb Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2020-cv-05898'
+                          court_id: flnd
+                          title: Emerald Coast Restaurants Inc d/b/a Q'QUIGLEYS Seafood and Oyster Sports Bar v. Aspen Specialty Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2021-cv-00832'
+                          court_id: flnd
+                          title: BROWN v. TRANSFINANCIAL COMPANIES LLC
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-3:2022-cv-01857'
+                          court_id: flnd
+                          title: BROWN v. MIDLAND CREDIT MANAGEMENT INC
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-5:2022-cv-00003'
+                          court_id: flnd
+                          title: DEMARCUS v. RESIDENT RESEARCH LLC et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-7:2020-cv-17702'
+                          court_id: flnd
+                          title: MASON v. 3M COMPANY et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-7:2020-cv-17790'
+                          court_id: flnd
+                          title: GIBSON v. 3M COMPANY et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-7:2020-cv-41943'
+                          court_id: flnd
+                          title: FLETCHER v. 3M COMPANY et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-7:2020-cv-47737'
+                          court_id: flnd
+                          title: SHEPHERD v. 3M COMPANY et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flnd-8:2020-cv-30452'
+                          court_id: flnd
+                          title: STRECKER v. 3M COMPANY et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flsb-9:2022-bk-10886'
+                          court_id: flsb
+                          title: Panagiotis Kechagias
+                          case_number: null
+                          date_filed: '2022-02-03'
+                        - id: 'flsd-0:2014-cr-60094-441164'
+                          court_id: flsd
+                          title: USA v. Ladin et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'flsd-1:2017-cr-20559-511470'
+                          court_id: flsd
+                          title: USA v. Johnson
+                          case_number: null
+                          date_filed: null
+                        - id: 'flsd-9:2021-mj-08068'
+                          court_id: flsd
+                          title: USA v. Smerling
+                          case_number: null
+                          date_filed: '2021-02-26'
+                        - id: 'flsd-9:2023-cv-80015'
+                          court_id: flsd
+                          title: Castro v. Trump
+                          case_number: null
+                          date_filed: '2023-01-06'
+                        - id: 'gamd-1:2017-cv-00201'
+                          court_id: gamd
+                          title: EQUAL EMPLOYMENT OPPORTUNITY COMMISSION v. PHOEBE PUTNEY MEMORIAL HOSPITAL INC
+                          case_number: null
+                          date_filed: null
+                        - id: 'gamd-4:2020-cv-00094'
+                          court_id: gamd
+                          title: Campagna v. TD Bank NA
+                          case_number: null
+                          date_filed: null
+                        - id: 'gamd-5:2016-cv-00402'
+                          court_id: gamd
+                          title: Hudson v. Tyson Farms Inc
+                          case_number: null
+                          date_filed: null
+                        - id: 'gamd-5:2018-cv-00044'
+                          court_id: gamd
+                          title: Brannen et al v. Jackson National Life Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2017-cv-03303'
+                          court_id: gand
+                          title: 'Malphurs v. Active Production & Design,Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2017-cv-03869'
+                          court_id: gand
+                          title: 'United States of America Ex Rel. et al v. Turning Point Care Center, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2017-md-02782'
+                          court_id: gand
+                          title: 'IN RE: Ethicon Physiomesh Flexible Composite Hernia Mesh Products Liability Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2018-cv-03005'
+                          court_id: gand
+                          title: Veritiv Operating Company v. Berman et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2018-cv-03801'
+                          court_id: gand
+                          title: Weaver v. Anthem Bcbsga
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2019-cv-04048'
+                          court_id: gand
+                          title: 'Norment v. Foundation Building Materials, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2019-cv-04466'
+                          court_id: gand
+                          title: 'Walton et al v. Publix Supermarkets, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2019-cv-05435'
+                          court_id: gand
+                          title: 'Middleton v. Wells Fargo Bank, N.A.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2020-cv-01573'
+                          court_id: gand
+                          title: 'Premier Specialty Brands LLC v. Dansons US, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2020-cv-01667'
+                          court_id: gand
+                          title: Shiflett v. The Southern Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2020-cv-02907'
+                          court_id: gand
+                          title: 'Callum et al v. SE Communications, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2020-cv-02975'
+                          court_id: gand
+                          title: 'Mathis v. Ethicon, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2020-cv-04484'
+                          court_id: gand
+                          title: Yarbough v. Kaiser Permanente Georgia Region
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2021-cv-02982'
+                          court_id: gand
+                          title: 'Phish, Inc. v. Various John Does, Jane Does and XYZ Corporations'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-1:2021-cv-04231'
+                          court_id: gand
+                          title: 'Pryor v. Glory Healthcare Services, LLC, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-2:2021-cv-00207'
+                          court_id: gand
+                          title: 'Foundation Food Group, Inc. et al v. Selective Way Insurance Company'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gand-3:2021-cv-00018'
+                          court_id: gand
+                          title: 'Edwards v. Twin Coast Metrology, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gasd-2:2019-cv-00060'
+                          court_id: gasd
+                          title: 'Runyan v. Surgery Partners, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gasd-3:2016-cv-00020'
+                          court_id: gasd
+                          title: 'United States of America v. Funds Seized From Fidelity Investments, et al.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'gasd-4:2020-cv-00160'
+                          court_id: gasd
+                          title: 'Williams & Haupt, P.C. v. Century Bank et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'hid-1:2020-cv-00564'
+                          court_id: hid
+                          title: 'Zuru Inc. et al v. Individuals, Corporations, Limited Liability Companies, Partnerships, and Unincorporated Associations Identified On Schedule A'
+                          case_number: null
+                          date_filed: null
+                        - id: 'hid-1:2021-cv-00408'
+                          court_id: hid
+                          title: Perrine v. eTN Corporation et al
+                          case_number: null
+                          date_filed: '2021-10-12'
+                        - id: 'iasd-4:2018-cv-00124'
+                          court_id: iasd
+                          title: 'White Communications, LLC et al v. Synergies3 Tec Services, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilcd-4:2019-cv-04067'
+                          court_id: ilcd
+                          title: 'Koziczkowski v. Forefront Dermatology, S.C. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilnd-1:2020-cv-01834'
+                          court_id: ilnd
+                          title: Freeman v. MAM USA Corporation
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilnd-1:2021-cv-02703'
+                          court_id: ilnd
+                          title: Mohammed v. Citigroup Inc. et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilnd-1:2023-cv-00818'
+                          court_id: ilnd
+                          title: 'In RE: Hair Relaxer Marketing, Sales Practices, And Products Liability Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilnd-3:2017-cv-50219'
+                          court_id: ilnd
+                          title: Padron v. Berryhill
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilsd-3:2012-cv-11686'
+                          court_id: ilsd
+                          title: Brigham et al v. Bayer Corporation et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilsd-3:2017-cv-00539'
+                          court_id: ilsd
+                          title: Grayson v. Furlow et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilsd-3:2019-cv-00627'
+                          court_id: ilsd
+                          title: 'Green v. Wexford Health Sources, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ilsd-3:2020-cv-01167'
+                          court_id: ilsd
+                          title: 'Midwest Orthodontic Associates, Ltd. v. Cincinnati Casualty Company et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'jpml-0:2021-md-02987'
+                          court_id: jpml
+                          title: 'IN RE: General Motors LLC Chevrolet Bolt EV Battery Products Liability Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'jpml-0:2023-md-03097'
+                          court_id: jpml
+                          title: 'IN RE: Concrete and Cement Additives Antitrust Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'kyed-2:2021-cv-00075'
+                          court_id: kyed
+                          title: 'Scheidt v. Nations Direct Mortgage, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'kyed-3:2018-cv-00025'
+                          court_id: kyed
+                          title: J.b-K. et al v. Meier et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'kyed-5:2020-cv-00413'
+                          court_id: kyed
+                          title: 'LexFit, LLC v. West Bend Mutual Insurance Company'
+                          case_number: null
+                          date_filed: null
+                        - id: 'kyed-6:2019-cv-00128'
+                          court_id: kyed
+                          title: Hammons v. Barkdull et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'kyed-7:2015-cv-00097'
+                          court_id: kyed
+                          title: Bentley v. Highlands Hospital Corporation et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'laed-2:2020-cv-01112'
+                          court_id: laed
+                          title: 'Crapisi v. Accord Healthcare, Inc. et al'
+                          case_number: null
+                          date_filed: '2020-04-05'
+                        - id: 'lawd-6:2022-cv-02576'
+                          court_id: lawd
+                          title: Marceaux v. Abbott Laboratories Inc et al
+                          case_number: null
+                          date_filed: '2022-08-10'
+                        - id: 'mad-1:2015-cv-10130'
+                          court_id: mad
+                          title: Kennedy et al v. Chavez et al
+                          case_number: '1:2015-cv-10130'
+                          date_filed: null
+                        - id: 'mad-1:2015-cv-13445'
+                          court_id: mad
+                          title: Rowe v. NutraClick International LLC et al
+                          case_number: '1:2015-cv-13445'
+                          date_filed: null
+                        - id: 'mad-1:2017-cv-10559'
+                          court_id: mad
+                          title: 'Securenet Solutions Group, LLC v. Tyco Integrated Security LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mad-1:2020-cv-10107'
+                          court_id: mad
+                          title: Walter Raudonis v. RealtyShares Inc. et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mad-1:2020-cv-11360'
+                          court_id: mad
+                          title: 'Platt v. U.S. Bank N.A.,AS Trustee et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mad-1:2021-cv-11558'
+                          court_id: mad
+                          title: United States of America et al v. American Airlines Group Inc. et al
+                          case_number: null
+                          date_filed: '2021-09-21'
+                        - id: 'mdd-1:2017-md-02775'
+                          court_id: mdd
+                          title: In Re Smith & Nephew Birmingham Hip Resurfacing (BHR) Hip Implant Products Liability Litigation
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-1:2019-cv-00078'
+                          court_id: mdd
+                          title: Ali v. Hogan et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-1:2019-cv-01255'
+                          court_id: mdd
+                          title: Baron v. Sprint Corporation
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-1:2019-cv-01299'
+                          court_id: mdd
+                          title: 'Ray et al v. T-Mobile Us, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-1:2019-cv-02439'
+                          court_id: mdd
+                          title: 'Just Puppies, Inc.et al v. Frosh et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-1:2020-cv-00230'
+                          court_id: mdd
+                          title: 'Brito v. Major Energy Electric Services, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-1:2021-cv-00371'
+                          court_id: mdd
+                          title: 'Fulbright et al v. Smith & Nephew, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-8:2016-cv-00710'
+                          court_id: mdd
+                          title: Rockledge Associates LLC v. Transamerica Life Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'mdd-8:2018-cv-02495'
+                          court_id: mdd
+                          title: 'Kelly v. Giant Food, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'med-1:2020-cv-00055'
+                          court_id: med
+                          title: Aca Connects - AMERICA'S Communications Association et al v. Frey et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mied-2:2015-cv-14162'
+                          court_id: mied
+                          title: Federal-Mogul Motorparts Corporation v. Mevotech L.P.
+                          case_number: null
+                          date_filed: null
+                        - id: 'miwd-1:2003-cv-00236'
+                          court_id: miwd
+                          title: 'Quilling v. Trade Partners, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'miwd-1:2016-cv-01199'
+                          court_id: miwd
+                          title: 'Stryker Corporation et al v. Poseidon Surgical, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'miwd-1:2017-cv-00532'
+                          court_id: miwd
+                          title: Cowley v. Cedar Springs Public Schools et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'miwd-1:2021-cv-00146'
+                          court_id: miwd
+                          title: Falls Lake National Insurance Company v. Magoon
+                          case_number: null
+                          date_filed: null
+                        - id: 'miwd-1:2022-cv-00151'
+                          court_id: miwd
+                          title: Perry v. Anderson Building Materials Co.
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2015-cv-01876'
+                          court_id: mnd
+                          title: 'Ritchie Capital Management, L.L.C. et al v. Bmo Harris Bank N.A.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2016-cv-01918'
+                          court_id: mnd
+                          title: Farmer v. Colvin
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2018-cv-01906'
+                          court_id: mnd
+                          title: Dahlheimer v. Oberg et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2020-cv-02016'
+                          court_id: mnd
+                          title: Becker v. Wells Fargo & Co. et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2021-cv-00203'
+                          court_id: mnd
+                          title: Turner v. Thyssenkrupp Elevator et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2021-cv-00389'
+                          court_id: mnd
+                          title: Tunick v Brown et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'mnd-0:2021-cv-01256'
+                          court_id: mnd
+                          title: 'Milhouse v. Prudential Insurance Company of America, the'
+                          case_number: null
+                          date_filed: null
+                        - id: 'msnd-1:2019-cv-00176'
+                          court_id: msnd
+                          title: Pevey v. 3M Company et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'msnd-3:2020-cv-00063'
+                          court_id: msnd
+                          title: 'Bailey Farms BBP v. B & B Produce, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ncmd-1:2019-cv-00327'
+                          court_id: ncmd
+                          title: Gonzalez et al v. Inbox Loan et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'ncwd-3:2022-md-03036'
+                          court_id: ncwd
+                          title: 'In re: Gardasil Products Liability Litigation'
+                          case_number: null
+                          date_filed: '2022-08-04'
+                        - id: 'njd-3:2013-cv-00571'
+                          court_id: njd
+                          title: 'Depomed, Inc. v. Purdue Pharma L.P. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvb-2:2023-bk-10423'
+                          court_id: nvb
+                          title: 'Cash Cloud, Inc.'
+                          case_number: null
+                          date_filed: '2023-02-07'
+                        - id: 'nvd-2:2020-cv-00256'
+                          court_id: nvd
+                          title: Cooley v. Winco Foods LLC
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-2:2020-cv-00487'
+                          court_id: nvd
+                          title: 'Olson v. Too Faced Cosmetics, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-2:2020-cv-01330'
+                          court_id: nvd
+                          title: Kothari v. China XD Plastics Company Limited et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-2:2020-cv-01481'
+                          court_id: nvd
+                          title: 'DePierro v. Las Vegas Police Protective Association Metro, Inc et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-2:2021-cv-02079'
+                          court_id: nvd
+                          title: Jones et al v. Equifax Information Services LLC et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-2:2021-cv-02195'
+                          court_id: nvd
+                          title: Atkins et al v. Clark County School District et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-2:2022-cv-00412'
+                          court_id: nvd
+                          title: 'Bloom v. Zuffa, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-3:2019-cv-00060'
+                          court_id: nvd
+                          title: 'HP Tuners, LLC v. Cannata'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nvd-3:2020-cv-00608'
+                          court_id: nvd
+                          title: 'Zare v. Ideanomics, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nyed-1:2016-cr-00297-386283'
+                          court_id: nyed
+                          title: USA v. Belardo et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'nyed-1:2020-cv-02768'
+                          court_id: nyed
+                          title: Williams v. Walmart Inc.
+                          case_number: null
+                          date_filed: null
+                        - id: 'nyed-1:2020-cv-05377'
+                          court_id: nyed
+                          title: 'Chauhan v. Intercept Pharmaceuticals, Inc. et al'
+                          case_number: null
+                          date_filed: '2020-11-05'
+                        - id: 'nyed-1:2021-cv-00381'
+                          court_id: nyed
+                          title: 'Karp v. Voyager Therapeutics, Inc. et al'
+                          case_number: null
+                          date_filed: '2021-01-22'
+                        - id: 'nyed-1:2021-cv-01386'
+                          court_id: nyed
+                          title: Gong v. Neptune Wellness Solutions Inc. et al
+                          case_number: null
+                          date_filed: '2021-03-16'
+                        - id: 'nyed-2:2021-cv-06613'
+                          court_id: nyed
+                          title: Sulzer Mixpac AG v. Kettenbach GMBH and CO KG et al
+                          case_number: null
+                          date_filed: '2021-11-27'
+                        - id: 'nysd-1:2000-cv-01898'
+                          court_id: nysd
+                          title: 'In re: Methyl Tertiary Butyl Ether ("MTBE") Products Liability Litigation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nysd-1:2008-cv-00312'
+                          court_id: nysd
+                          title: New Jersey Department of Environmental Protection v. Amerada Hess Corp.
+                          case_number: null
+                          date_filed: null
+                        - id: 'nysd-1:2015-cv-06192'
+                          court_id: nysd
+                          title: 'Gust, Inc. v. AlphaCap Ventures, LLC'
+                          case_number: '1:2015-cv-06192'
+                          date_filed: null
+                        - id: 'nysd-1:2016-cv-02701'
+                          court_id: nysd
+                          title: Sadowski v. Mediatakeout.com LLC
+                          case_number: null
+                          date_filed: null
+                        - id: 'nysd-1:2019-cv-02257'
+                          court_id: nysd
+                          title: 'Parisienne v. HeyKorean, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nysd-1:2020-cv-01392'
+                          court_id: nysd
+                          title: 'Antetokounmpo v. Sportz Cases, LLC'
+                          case_number: null
+                          date_filed: '2020-02-18'
+                        - id: 'nysd-1:2020-cv-10832'
+                          court_id: nysd
+                          title: Securities and Exchange Commission v. Ripple Labs Inc. et al.
+                          case_number: null
+                          date_filed: '2020-12-22'
+                        - id: 'nysd-1:2021-cv-07177'
+                          court_id: nysd
+                          title: Simkin v. Puff Bar
+                          case_number: null
+                          date_filed: '2021-08-25'
+                        - id: 'nysd-1:2022-cr-00673-590940'
+                          court_id: nysd
+                          title: USA v. BANKMAN-FRIED
+                          case_number: null
+                          date_filed: null
+                        - id: 'nysd-1:2024-cv-01500'
+                          court_id: nysd
+                          title: Yzaguirre v. Levin et al
+                          case_number: null
+                          date_filed: '2024-02-27'
+                        - id: 'nysd-7:2018-cv-11396'
+                          court_id: nysd
+                          title: Brady et al v. Anker Innovations Limited et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-1:2019-cv-00259'
+                          court_id: nywd
+                          title: 'Karalus v. Delaware North Companies Travel Hospitality Services, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-1:2020-cv-01097'
+                          court_id: nywd
+                          title: Phillips v. Commissioner of Social Security
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-1:2021-cv-00501'
+                          court_id: nywd
+                          title: Womack v. Commissioner of Social Security
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-1:2021-cv-01204'
+                          court_id: nywd
+                          title: 'Strike 3 Holdings, LLC v. Doe'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-1:2021-cv-01205'
+                          court_id: nywd
+                          title: 'Strike 3 Holdings, LLC v. Doe'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-6:2012-cv-06455'
+                          court_id: nywd
+                          title: 'United States of America v. $303,355.00 United States Currency et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'nywd-6:2015-cv-06577'
+                          court_id: nywd
+                          title: 'Preston et al v. Excellus Health Plan, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'oked-6:2008-cv-00228'
+                          court_id: oked
+                          title: Hicks v. Jones et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'oknd-4:2010-cv-00829'
+                          court_id: oknd
+                          title: Adkinson v. USA
+                          case_number: null
+                          date_filed: null
+                        - id: 'oknd-4:2019-cv-00304'
+                          court_id: oknd
+                          title: Mengert v. U.S. Transportation Security Administration et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'oknd-4:2020-cv-00191'
+                          court_id: oknd
+                          title: 'Yeager v. Tiger Commissary Services, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'orb-3:2015-bk-33959'
+                          court_id: orb
+                          title: Christian Karl-Heinz Schuster
+                          case_number: null
+                          date_filed: null
+                        - id: 'orb-3:2016-ap-03083'
+                          court_id: orb
+                          title: 'Machine Zone, Inc. and Peak Web LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'ord-3:2015-cv-01171'
+                          court_id: ord
+                          title: Kaihoi v. Premera et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'paed-2:2016-AL-27243'
+                          court_id: paed
+                          title: 'In re: Albuterol Cases (INDIRECT RESELLER)'
+                          case_number: null
+                          date_filed: null
+                        - id: 'paed-2:2016-cv-01068'
+                          court_id: paed
+                          title: Nineveh Investments Limited v. United States of America
+                          case_number: null
+                          date_filed: null
+                        - id: 'pamd-1:2011-cv-01015'
+                          court_id: pamd
+                          title: Shannon v. Dillman et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'pamd-1:2012-cv-00540'
+                          court_id: pamd
+                          title: 'FRY Communications, Inc. v. Ambassador Media Group, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'pamd-1:2022-cv-02055'
+                          court_id: pamd
+                          title: Romaine Cleckner v. 3M Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'pamd-3:2009-cv-01584'
+                          court_id: pamd
+                          title: Facciponte et al v. Briggs & Stratton Corporation et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'rid-1:2020-cv-00191'
+                          court_id: rid
+                          title: Choi et al v. Brown University
+                          case_number: null
+                          date_filed: '2020-04-30'
+                        - id: 'scd-2:2017-cv-02534'
+                          court_id: scd
+                          title: 'County of Charleston, South Carolina v. AT&T Corp et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-2:2019-cv-03590'
+                          court_id: scd
+                          title: Oppenheimer v. Scarafile et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-2:2020-cv-01671'
+                          court_id: scd
+                          title: Coffey & McKenzie LLC v. Twin City Fire Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-2:2020-cv-04219'
+                          court_id: scd
+                          title: Oppenheimer v. Williams et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-2:2021-cv-01803'
+                          court_id: scd
+                          title: Berkeley County School District v. Juul Labs Inc et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-3:2018-cv-00599'
+                          court_id: scd
+                          title: Boykin v. Wells Fargo Bank N.A. et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-3:2020-cv-02850'
+                          court_id: scd
+                          title: Smith v. Michelin Tire Corporation
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-4:2021-cv-01672'
+                          court_id: scd
+                          title: Steele v. Bluegreen Vacations Unlimited Inc
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-6:2019-cv-00495'
+                          court_id: scd
+                          title: Hayes v. Prudential Insurance Company of America
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-6:2021-cv-01437'
+                          court_id: scd
+                          title: Valentino v. Anthem Life Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-6:2021-cv-02030'
+                          court_id: scd
+                          title: Johnson v. Prudential Insurance Company of America
+                          case_number: null
+                          date_filed: null
+                        - id: 'scd-8:2011-mn-02000'
+                          court_id: scd
+                          title: Building Materials Corporation of America Asphalt Roofing Shingle Products Liability Litigation MDL 2283
+                          case_number: null
+                          date_filed: null
+                        - id: 'tneb-1:2013-bk-13462'
+                          court_id: tneb
+                          title: Rocky Dee Alexander and Tracey Annette Alexander
+                          case_number: null
+                          date_filed: null
+                        - id: 'tned-1:2022-cv-00093'
+                          court_id: tned
+                          title: Bell v. Hamilton County Tennessee et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'tnmd-3:2017-cv-00997'
+                          court_id: tnmd
+                          title: Murphy v. VAPENW.com et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'tnmd-3:2018-cv-00978'
+                          court_id: tnmd
+                          title: Equal Employment Opportunity Commission v. Saint Thomas Health
+                          case_number: null
+                          date_filed: null
+                        - id: 'tnmd-3:2021-cv-00138'
+                          court_id: tnmd
+                          title: 'Tremblay v. Clover Health Investments, Corp. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'tnmd-3:2021-cv-00422'
+                          court_id: tnmd
+                          title: 'Phoenix Fabricators and Erectors, LLC v. CB&I Storage Tank Solutions, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txed-2:2015-cv-00063'
+                          court_id: txed
+                          title: 'Alphacap Ventures, LLC v. Realty Mogul, Co.'
+                          case_number: '2:2015-cv-00063'
+                          date_filed: null
+                        - id: 'txed-2:2016-cv-01260'
+                          court_id: txed
+                          title: 'SecureNet Solutions Group, LLC v. Microsoft Corporation'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txed-2:2017-cv-00175'
+                          court_id: txed
+                          title: 'Uniloc USA, Inc. et al v. Ubisoft, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txed-2:2017-cv-00275'
+                          court_id: txed
+                          title: 'Uniloc USA, Inc. et al v. Riot Games, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txed-4:2016-cv-00978'
+                          court_id: txed
+                          title: 'Hall v. Rent-A-Center, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txed-4:2021-cv-00160'
+                          court_id: txed
+                          title: 'Stafford v. The Right Choice Heating & Air, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txed-5:2020-cv-00055'
+                          court_id: txed
+                          title: 'Kirsch Research and Development, LLC v. Atlas Roofing Corporation'
+                          case_number: null
+                          date_filed: '2020-04-24'
+                        - id: 'txed-5:2020-cv-00058'
+                          court_id: txed
+                          title: 'Kirsch Research and Development, LLC v. FT Synthetics Inc.'
+                          case_number: null
+                          date_filed: '2020-04-24'
+                        - id: 'txnd-2:2022-cv-00247'
+                          court_id: txnd
+                          title: Garrett v. Happy State Bank
+                          case_number: null
+                          date_filed: '2022-12-23'
+                        - id: 'txnd-3:2020-cv-00948'
+                          court_id: txnd
+                          title: Berkseth-Rojas DDS v. Aspen American Insurance Company
+                          case_number: null
+                          date_filed: null
+                        - id: 'txsb-4:2017-ap-03324'
+                          court_id: txsb
+                          title: Schmidt v. B Asset Manager LP et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'txsb-4:2020-bk-30967'
+                          court_id: txsb
+                          title: 'Watson Grinding & Manufacturing Co. and Watson Valve Services, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txsd-1:2018-cr-00008-1476804'
+                          court_id: txsd
+                          title: USA v. Mesquias et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'txsd-4:2017-cv-01618'
+                          court_id: txsd
+                          title: Dish Network L.L.C. v. Doe 1 d/b/a ZemTV et al
+                          case_number: null
+                          date_filed: null
+                        - id: 'txsd-4:2019-cv-03546'
+                          court_id: txsd
+                          title: 'Farrington v. BackChina, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'txwd-6:2022-cv-01012'
+                          court_id: txwd
+                          title: 'Tranquility IP LLC v. Schneider Electric USA, Inc.'
+                          case_number: null
+                          date_filed: '2022-09-28'
+                        - id: 'utd-2:2023-cv-00624'
+                          court_id: utd
+                          title: Dish Technologies L.L.C. et al v. Vidgo Inc.
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2017-cv-00469'
+                          court_id: vaed
+                          title: '411 Mania.com, LLC v. 411mania.com et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2018-cv-00024'
+                          court_id: vaed
+                          title: 'Save This Way, LLC v. Yes We Coupon, LLC et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2019-cv-00961'
+                          court_id: vaed
+                          title: 'Joe Hand Promotions, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2020-cv-00826'
+                          court_id: vaed
+                          title: 'Bunch v. Virginia Internal Medicine, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2021-cv-01412'
+                          court_id: vaed
+                          title: 'Jackson v. Equifax Information Services, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2021-cv-01452'
+                          court_id: vaed
+                          title: Ontel Products Corporation vs. the Unincorporated Associations Identified in Schedule A
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-1:2024-cv-01181'
+                          court_id: vaed
+                          title: Hrivnak v. FCA US LLC
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-2:2020-cv-00058'
+                          court_id: vaed
+                          title: 'Smith v. On Grid Infrastructure Services, LLC'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-2:2023-cv-00222'
+                          court_id: vaed
+                          title: 'CureVac SE, et al. v. BioNTech SE, et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-3:2020-cv-00117'
+                          court_id: vaed
+                          title: 'Barker v. Dominion Energy, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-3:2022-cv-00058'
+                          court_id: vaed
+                          title: 'McCloud et al v. Enserv, Inc. et al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vaed-4:2020-cv-00171'
+                          court_id: vaed
+                          title: 'Ward v. Energy Services Group International, Inc.'
+                          case_number: null
+                          date_filed: null
+                        - id: 'vid-3:2018-cv-00069'
+                          court_id: vid
+                          title: 'Crown Bay Marina, L.P. et al vs Jeffrey Epstein & Michelle Transportation Et.al'
+                          case_number: null
+                          date_filed: null
+                        - id: 'waed-4:2021-cv-05075'
+                          court_id: waed
+                          title: Reyes et al v. Chilton et al
+                          case_number: null
+                          date_filed: '2021-05-07'
+                        - id: 'wawb-2:2013-bk-16523'
+                          court_id: wawb
+                          title: William Latu and Taufa Latu
+                          case_number: null
+                          date_filed: null
+                        - id: 'wawd-2:2021-cv-01328'
+                          court_id: wawd
+                          title: Blue et al v. Usi Insurance Services LLC et al
+                          case_number: null
+                          date_filed: '2021-09-29'
+                        - id: 'wawd-3:2014-cv-05976'
+                          court_id: wawd
+                          title: Perfect Company v. Adaptics Limited
+                          case_number: null
+                          date_filed: null
+                        - id: 'wawd-3:2020-mc-05012'
+                          court_id: wawd
+                          title: 'In re: Cloudflare Inc re: "yespornplease.best"'
+                          case_number: null
+                          date_filed: '2020-03-25'
+                        - id: 'wawd-3:2020-mc-05016'
+                          court_id: wawd
+                          title: 'In re: Cloudflare Inc re: "xmoviesforyou.video"'
+                          case_number: null
+                          date_filed: '2020-03-25'
+                        - id: 'wvsb-6:2016-bk-60085'
+                          court_id: wvsb
+                          title: Timothy Hugh Dials
+                          case_number: null
+                          date_filed: null
+        '400':
+          $ref: '#/components/responses/400Error'
+  /documents:
+    get:
+      summary: returns a list of documents in a case
+      description: 'Returns a list of documents in the specified case. A "document" may refer to a physical document that can be downloaded, or it may refer to a text-only docket sheet entry, such as a minute entry.'
+      tags:
+        - Documents
+      parameters:
+        - name: case_id
+          in: query
+          description: The DocketBird case id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned a list of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        caset_id:
+                          type: string
+                        title:
+                          type: string
+                        date_filed:
+                          type: string
+                          nullable: true
+                  has_more:
+                    type: boolean
+        '400':
+          $ref: '#/components/responses/400Error'
+    parameters: []
+  '/documents/{document_id}':
+    get:
+      summary: returns a document
+      description: 'This returns an object describing a single document. A "document" may refer to a physical document that can be downloaded, or it may refer to a text-only docket sheet entry, such as a minute entry.'
+      tags:
+        - Documents
+      parameters:
+        - name: document_id
+          description: The DocketBird document id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned a document object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      document:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          title:
+                            type: string
+                          filing_date:
+                            type: string
+                          restricted:
+                            type: boolean
+                          primary_docket_sheet_number:
+                            type: integer
+                          pacer_document_url:
+                            type: string
+                          downloaded:
+                            type: integer
+                          docketbird_document_url:
+                            type: string
+                          custom_filename:
+                            type: string
+                x-examples:
+                  Example 1:
+                    status: success
+                    data:
+                      document:
+                        id: 'cand-4:2022-cv-04775-00111'
+                        title: 'STIPULATION of Dismissal filed by Amazon.com Services LLC, Immedia Semiconductor LLC.'
+                        filing_date: '2024-05-29'
+                        restricted: false
+                        primary_docket_sheet_number: 111
+                        pacer_document_url: 'https://ecf.cand.uscourts.gov/doc1/035124445946'
+                        downloaded: 1
+                        docketbird_document_url: 'https://docketbird-case-documents.s3.amazonaws.com/cand-4%3A2022-cv-04775-00111.pdf?AWSAccessKeyId=AKIARBKZIPDTKKER6CE4&Signature=un7Y%2BR%2B9Zub1bZPfBnVBB8ZegUE%3D&Expires=1738458381'
+                        custom_filename: Document No. 0111. (05-29-2024) STIPULATION of Dismissal filed by Amazon.com Services LLC Immedia Semiconductor LLC. Northern District of California.pdf
+        '400':
+          $ref: '#/components/responses/400Error'
+  /follow_case:
+    post:
+      summary: follows a case
+      tags:
+        - Cases
+      responses:
+        '200':
+          description: successfully followed the case
+          content: {}
+      operationId: post-follow-case
+      description: Follows a case. Federal cases will be followed twice per weekday. State cases will be followed once per weekday. Applicable court fees may apply.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                case_id:
+                  type: string
+                  x-stoplight:
+                    id: yb79xdv3xae8e
+  /calendar_entries:
+    get:
+      summary: get calendar entries for a case
+      tags:
+        - Calendars
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      calendar_entries:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            uuid:
+                              type: string
+                            case_id:
+                              type: string
+                            document_id:
+                              type: string
+                            iso8601_datetime:
+                              type: string
+                            title:
+                              type: string
+                x-examples:
+                  Example 1:
+                    status: success
+                    data:
+                      calendar_entries:
+                        - id: 2535
+                          uuid: bf49b209-1b3e-4490-b203-27d17605914b
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00025'
+                          iso8601_datetime: '2023-05-05T10:00:00-07:00'
+                          title: Initial Case Management Conference via Zoom
+                        - id: 2536
+                          uuid: 4177e931-f1bb-443d-9d87-668c7215b876
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00025'
+                          iso8601_datetime: '2023-04-12'
+                          title: Deadline for Amended Pleadings
+                        - id: 2537
+                          uuid: 4a0dcad7-d133-44a4-8b62-1f8a01c3f0ed
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00025'
+                          iso8601_datetime: '2023-04-28'
+                          title: Deadline for Case Management Statement
+                        - id: 3599
+                          uuid: 65e30564-4c09-4bf8-8fd5-294b629641ec
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00027'
+                          iso8601_datetime: '2023-04-28T12:00:00-07:00'
+                          title: Deadline for sending one list of names of all counsel appearing for all parties in one email to the CRD at vccrd@cand.uscourts.gov
+                        - id: 3600
+                          uuid: 63cd7301-2219-44cf-85c1-025de694dbb2
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00027'
+                          iso8601_datetime: '2023-05-05T10:00:00-07:00'
+                          title: Initial Case Management Conference by Videoconference Only
+                        - id: 3601
+                          uuid: 52b29ff6-dc1e-4db9-8a35-865c0be505f4
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00027'
+                          iso8601_datetime: '2023-05-05'
+                          title: Advance Registration of Counsel required for Initial Case Management Conference
+                        - id: 3602
+                          uuid: d58fcd81-88e4-4bf8-8352-007d119f3cfa
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00027'
+                          iso8601_datetime: '2023-04-28'
+                          title: Deadline for submitting Joint Case Management Statement
+                        - id: 3839
+                          uuid: e7a5e947-eeef-4fa9-a963-71f2d465a8b4
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00029'
+                          iso8601_datetime: '2023-05-19T10:00:00-07:00'
+                          title: Initial Case Management Conference (reset) by Videoconference Only
+                        - id: 3840
+                          uuid: b241bdc5-ae05-43b1-879e-bc0c932762b9
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00029'
+                          iso8601_datetime: '2023-05-12'
+                          title: 'Deadline for sending one list of names of all counsel appearing for all parties to the CRD at vccrd@cand.uscourts.gov by 12:00 PM'
+                        - id: 3841
+                          uuid: c48b4c6b-b41b-49f8-b3b9-7a14ce764ab2
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00029'
+                          iso8601_datetime: '2023-05-05'
+                          title: Continued Initial Case Management Conference
+                        - id: 3842
+                          uuid: 33a71511-5346-4745-940a-e25fe668d99a
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00029'
+                          iso8601_datetime: '2023-05-12'
+                          title: Deadline for Joint Case Management Statement
+                        - id: 6121
+                          uuid: 6df9765b-964d-4e74-a8b0-007d8453e24c
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00032'
+                          iso8601_datetime: '2024-05-30T10:00:00-07:00'
+                          title: Class Certification Hearing in San Francisco
+                        - id: 6122
+                          uuid: 64c9f0c2-36d2-4856-b266-c24feac15152
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00032'
+                          iso8601_datetime: '2024-06-14T10:00:00-07:00'
+                          title: Further Case Management Conference via Videoconference
+                        - id: 6123
+                          uuid: 7e2a0433-c70a-467f-b204-ed20fbe39dac
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00032'
+                          iso8601_datetime: '2024-01-12'
+                          title: Motion for Class Certification deadline
+                        - id: 6124
+                          uuid: e049daad-5f9f-479a-a3a2-1f111de1601e
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00032'
+                          iso8601_datetime: '2024-03-08'
+                          title: Opposition to Class Certification deadline
+                        - id: 6125
+                          uuid: b110a899-1710-4547-97d3-0b08b0527a29
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00032'
+                          iso8601_datetime: '2024-05-03'
+                          title: Replies to Class Certification deadline
+                        - id: 6126
+                          uuid: 3f5b7462-b048-49b8-9a16-0a6c11349212
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00032'
+                          iso8601_datetime: '2024-06-07'
+                          title: Joint Case Management Statement deadline
+                        - id: 205348
+                          uuid: 04dfa7c8-3591-48e4-a0d1-ee6904e042ac
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00041'
+                          iso8601_datetime: '2023-10-24T15:30:00-07:00'
+                          title: Discovery Hearing with Judge Tse via Zoom webinar
+                        - id: 206749
+                          uuid: 453b2569-61ac-4ebc-8cd3-2c02cc852690
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00042'
+                          iso8601_datetime: '2024-10-24'
+                          title: Discovery hearing with Magistrate Judge Alex G. Tse vacated
+                        - id: 241091
+                          uuid: 1c624544-a10f-47b7-92fd-eb6f6668ed42
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00046'
+                          iso8601_datetime: '2024-08-29T10:00:00-07:00'
+                          title: Class Certification Motion Hearing in San Francisco Courtroom 04
+                        - id: 241092
+                          uuid: fb38c7da-4840-4c3b-bf66-43ce1eed5790
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00046'
+                          iso8601_datetime: '2024-04-26'
+                          title: Deadline for Motion for Class Certification & Expert Disclosures
+                        - id: 241093
+                          uuid: 35c6385c-ad6c-4592-929f-5cff564c9e97
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00046'
+                          iso8601_datetime: '2024-06-21'
+                          title: Deadline for Opposition to Motion & Expert Disclosures/Rebuttals
+                        - id: 241094
+                          uuid: f31bffcc-6247-4ee5-b4ee-8c0055df6a10
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00046'
+                          iso8601_datetime: '2024-08-09'
+                          title: Deadline for Reply in Support of Motion & Rebuttals
+                        - id: 241155
+                          uuid: b07f08f2-1331-407a-9b27-ef5859aefef8
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00047'
+                          iso8601_datetime: '2024-09-13T10:00:00-07:00'
+                          title: Case Management Conference via Videoconference
+                        - id: 241156
+                          uuid: 394aef5a-4a11-4e9b-ab9c-47e126ea6c05
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00047'
+                          iso8601_datetime: '2024-06-14'
+                          title: Continued Case Management Conference
+                        - id: 241157
+                          uuid: 1fc3210f-9d1c-4d5d-b28e-1ee841ebad2a
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00047'
+                          iso8601_datetime: '2024-09-06'
+                          title: Deadline for Joint Case Management Statement
+                        - id: 386423
+                          uuid: d2620195-71fb-420b-b709-1dda38c2d48e
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00049'
+                          iso8601_datetime: '2024-04-18T10:00:00-07:00'
+                          title: 'Motion Hearing in San Francisco, Courtroom 04, 17th Floor'
+                        - id: 386424
+                          uuid: 2090cfeb-c151-46c2-85ce-2ef0e0c98913
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00049'
+                          iso8601_datetime: '2024-03-22'
+                          title: Deadline for Responses to Motion to Stay
+                        - id: 386425
+                          uuid: a8d75a2f-e5d4-497b-be23-2ec5bb70c40f
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00049'
+                          iso8601_datetime: '2024-03-29'
+                          title: Deadline for Replies to Responses
+                        - id: 388132
+                          uuid: 0f21d61d-a53d-4a62-a8a0-e1165d7d789e
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00050'
+                          iso8601_datetime: '2024-03-14'
+                          title: Plaintiffs' deadline to file response on stay request
+                        - id: 485320
+                          uuid: 0192bd9a-f7bb-4691-b5b0-0e50a17fea80
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00053'
+                          iso8601_datetime: '2024-05-24'
+                          title: Case Management Conference
+                        - id: 485321
+                          uuid: 3b092fa0-5605-4c55-8674-beaeccd022f4
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00053'
+                          iso8601_datetime: '2024-05-17'
+                          title: Deadline for Joint Case Management Statement
+                        - id: 491415
+                          uuid: 018f3d0d-19bb-40f6-9b48-10b3e3247048
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00055'
+                          iso8601_datetime: '2024-05-24'
+                          title: Original Case Management Conference date
+                        - id: 491416
+                          uuid: c0530963-a268-4b9b-b8da-3b63c97614c3
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00055'
+                          iso8601_datetime: '2024-05-31'
+                          title: Rescheduled Case Management Conference date
+                        - id: 491424
+                          uuid: 1b0cdff0-e297-4632-9626-7d3867fb5189
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00056'
+                          iso8601_datetime: '2024-05-31T10:00:00-07:00'
+                          title: Case Management Conference via Zoom
+                        - id: 491425
+                          uuid: ff00ac5d-17d2-4cd4-8827-4701f51cfcf8
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00056'
+                          iso8601_datetime: '2024-05-31'
+                          title: Advance Registration of Counsel Required
+                        - id: 491426
+                          uuid: a7769b56-bafc-444e-ba38-399df72bd0dd
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00056'
+                          iso8601_datetime: '2024-05-24'
+                          title: Deadline for Joint Case Management Statement
+                        - id: 520690
+                          uuid: 4d629efe-f982-47ad-bf39-1a6e1b82f1d4
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00059'
+                          iso8601_datetime: '2024-12-12T10:00:00-08:00'
+                          title: 'Motion Hearing in San Francisco, Courtroom 04, 17th Floor'
+                        - id: 520691
+                          uuid: e3a9c9a3-c4c2-4777-a9fe-291748032ee1
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00059'
+                          iso8601_datetime: '2025-01-17T10:00:00-08:00'
+                          title: Further Case Management Conference via Videoconference
+                        - id: 520692
+                          uuid: 418bf18b-db6a-4c4c-aff9-ce570b162425
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00059'
+                          iso8601_datetime: '2024-08-30'
+                          title: Deadline for Motions for Class Certification
+                        - id: 520693
+                          uuid: 6c783bfe-668f-4071-9d6c-72a74e43c904
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00059'
+                          iso8601_datetime: '2024-10-18'
+                          title: Deadline for Responses to Class Certification
+                        - id: 520694
+                          uuid: 392d37a7-68b9-4b3c-95b1-e4833701890f
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00059'
+                          iso8601_datetime: '2024-11-22'
+                          title: Deadline for Replies to Class Certification
+                        - id: 520695
+                          uuid: 2d7f01b6-f0c6-4052-bd16-4af08e24a36b
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00059'
+                          iso8601_datetime: '2025-01-10'
+                          title: Deadline for Joint Case Management Statement
+                        - id: 525845
+                          uuid: dca76151-3779-422a-bf6e-b0dfd6a3ea00
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00060'
+                          iso8601_datetime: '2024-06-27'
+                          title: Deadline for Redaction Request
+                        - id: 525846
+                          uuid: 6f44d06d-8f46-4587-a237-61daf954cb4c
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00060'
+                          iso8601_datetime: '2024-07-08'
+                          title: Deadline for Submitting Redacted Transcript
+                        - id: 525847
+                          uuid: 25f7db50-a164-40ff-8a24-a689695a0f8e
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00060'
+                          iso8601_datetime: '2024-09-04'
+                          title: End of Transcript Restriction Period
+                        - id: 636912
+                          uuid: 916cf4cc-b607-4146-99b7-d97719401d41
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00064'
+                          iso8601_datetime: '2024-09-06'
+                          title: Deadline for Motion for Class Certification
+                        - id: 636913
+                          uuid: 7c2ae15a-fd9c-4436-a282-d7bafcd42f48
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00064'
+                          iso8601_datetime: '2024-10-25'
+                          title: Deadline for Responses
+                        - id: 659623
+                          uuid: 6dfb3170-ae1b-4ea8-9a41-5bebbe71b684
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00070'
+                          iso8601_datetime: '2024-12-12T10:00:00-08:00'
+                          title: 'Motion Hearing in San Francisco, Courtroom 04, 17th Floor'
+                        - id: 659624
+                          uuid: 6a9897be-d459-411d-8c4c-867a33aa67cf
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00070'
+                          iso8601_datetime: '2024-09-06'
+                          title: Deadline for Amended Pleadings
+                        - id: 659625
+                          uuid: af1dacc9-b226-4d38-83c1-c8970ec4d25a
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00070'
+                          iso8601_datetime: '2024-10-08'
+                          title: Deadline for Defendant's Motion to Dismiss
+                        - id: 659626
+                          uuid: feef45ab-0cb5-4577-9a7d-262d33f37bcb
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00070'
+                          iso8601_datetime: '2024-11-01'
+                          title: Deadline for Responses
+                        - id: 659627
+                          uuid: f6092947-f973-469e-afbe-47bb861d3ec8
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00070'
+                          iso8601_datetime: '2024-11-21'
+                          title: Deadline for Replies
+                        - id: 715367
+                          uuid: 803be6fe-c122-46db-8765-e681eb84fdfa
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00072'
+                          iso8601_datetime: '2024-12-12T10:00:00-08:00'
+                          title: Hearing for Motion to Dismiss in San Francisco
+                        - id: 715368
+                          uuid: 1d0fffb8-11a8-4ca0-bc98-6b77c7a40f15
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00072'
+                          iso8601_datetime: '2024-10-22'
+                          title: Deadline for Responses to Motion to Dismiss
+                        - id: 715369
+                          uuid: 8a643c1f-a946-41aa-8964-796928985a78
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00072'
+                          iso8601_datetime: '2024-10-29'
+                          title: Deadline for Replies to Motion to Dismiss
+                        - id: 829100
+                          uuid: 8fdce156-5d9f-400f-8966-1110075984e8
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00081'
+                          iso8601_datetime: '2025-03-17'
+                          title: Release of Transcript Restriction deadline
+                        - id: 868788
+                          uuid: fae17685-3a8c-428a-a0fb-9961ad0fa205
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00084'
+                          iso8601_datetime: '2025-01-24T10:00:00-08:00'
+                          title: Date of continued case management conference via Zoom
+                        - id: 868789
+                          uuid: e5911325-dc09-461b-b955-882fb843faf4
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00084'
+                          iso8601_datetime: '2025-01-17'
+                          title: Deadline for counsel appearance registration email
+                        - id: 868790
+                          uuid: 8c2f6f11-62e5-40b0-9021-f80ed1853431
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00084'
+                          iso8601_datetime: '2025-01-17'
+                          title: Original date of further case management conference
+                        - id: 887878
+                          uuid: 5ec5c15f-4d78-4684-a655-1967237a1572
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00085'
+                          iso8601_datetime: '2025-03-13T10:00:00-07:00'
+                          title: Motion to Dismiss Hearing in San Francisco
+                        - id: 887879
+                          uuid: c859e7f0-0b8a-44d4-807a-39ff5aa42717
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00085'
+                          iso8601_datetime: '2025-06-26T10:00:00-07:00'
+                          title: Motion for Class Certification Hearing in San Francisco
+                        - id: 887880
+                          uuid: 124806ff-ed4b-41b2-864e-d84af41cafc5
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00085'
+                          iso8601_datetime: '2025-02-11'
+                          title: Deadline for Motion to Dismiss/Response to Complaint
+                        - id: 887881
+                          uuid: f50c2492-b1eb-4b15-a68f-9fdb85611fea
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00085'
+                          iso8601_datetime: '2025-02-25'
+                          title: Deadline for Responses
+                        - id: 887882
+                          uuid: 6dde3ffe-6923-4804-bf86-b7d12314ca6e
+                          case_id: 'cand-3:2022-cv-04779'
+                          document_id: 'cand-3:2022-cv-04779-00085'
+                          iso8601_datetime: '2025-03-04'
+                          title: Deadline for Replies
+        '404':
+          description: case AutoCalendar not found. This is usually because your company has not yet created an autocalendar for the case.
+      operationId: get-calendar-entries
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: case_id
+  /create_autocalendar:
+    post:
+      summary: creates an autocalendar
+      tags:
+        - Calendars
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content: {}
+      operationId: post-create-autocalendar
+      description: 'Queues the creation of an autocalendar. Before the autocalendar is created, the case docket sheet will be updated. Court fees may apply.'
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  case_id: meow
+              minProperties: 1
+              properties:
+                case_id:
+                  type: string
+security:
+  - Authorization: []

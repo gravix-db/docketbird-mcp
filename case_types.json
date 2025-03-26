@@ -1,0 +1,40 @@
+{
+    "case_types": [
+      {
+        "name": "Civil Case",
+        "abbreviature": "cv",
+        "example": "cacd-2:2011-cv-06047"
+      },
+      {
+        "name": "Criminal Case",
+        "abbreviature": "cr",
+        "example": "ned-8:2014-cr-00415-68033"
+      },
+      {
+        "name": "Bankruptcy Case",
+        "abbreviature": "bk",
+        "example": "njb-2:2017-bk-15174"
+      },
+      {
+        "name": "Adversary Proceeding",
+        "abbreviature": "ap",
+        "example": "innb-4:2018-ap-04002"
+      },
+      {
+        "name": "Petty Offense",
+        "abbreviature": "po",
+        "example": "lawd-7:2013-po-00942"
+      },
+      {
+        "name": "Miscellaneous Proceeding",
+        "abbreviature": "mp",
+        "example": "azb-2:2019-mp-00010"
+      },
+      {
+        "name": "Appeal Case",
+        "abbreviature": "ca",
+        "example": "ca5-2021-30580"
+      }
+    ]
+  }
+  
