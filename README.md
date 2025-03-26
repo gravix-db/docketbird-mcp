@@ -55,3 +55,36 @@ The server provides the following tools:
 Make sure these files are in the same directory as the script:
 - `courts.json`: Contains information about all available courts
 - `case_types.json`: Contains information about different types of cases 
+
+## MCP Server Configuration
+
+The MCP server configuration can be added to one of these locations depending on your MCP client:
+
+- Cursor: `~/.cursor/mcp.json`
+- Claude in mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+Add the following configuration to the appropriate file:
+
+```json
+{
+  "mcpServers": {
+    "docketbird-mcp": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp",
+        "--with",
+        "requests",
+        "/path/to/docketbird-mcp/docketbird_mcp.py"
+      ],
+      "env": {
+        "DOCKETBIRD_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+Replace `/path/to/docketbird-mcp/docketbird_mcp.py` with the absolute path to your `docketbird_mcp.py` file.
+
