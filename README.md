@@ -63,24 +63,21 @@ The MCP server configuration can be added to one of these locations depending on
 - Cursor: `~/.cursor/mcp.json`
 - Claude in mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
+  1. Install uv if you haven't already:
+```bash
+pip3.11 install requests mcp
+```
+
 Add the following configuration to the appropriate file:
 
 ```json
 {
   "mcpServers": {
     "docketbird-mcp": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--with",
-        "mcp",
-        "--with",
-        "requests",
-        "/path/to/docketbird-mcp/docketbird_mcp.py"
-      ],
-      "env": {
-        "DOCKETBIRD_API_KEY": "your_api_key_here"
-      }
+            "command": "python3.11",
+            "args": ["PATH_TO_PROJECT/docketbird_mcp.py"],
+            "env": {
+                "DOCKETBIRD_API_KEY": "YOUR_KEY"
     }
   }
 }
