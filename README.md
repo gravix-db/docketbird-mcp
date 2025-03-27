@@ -24,7 +24,7 @@ source .venv/bin/activate  # On Unix/MacOS
 
 3. Install dependencies:
 ```bash
-uv pip install -r requirements.txt
+uv pip install .
 ```
 
 4. Set up your environment variables:
@@ -88,5 +88,5 @@ Add the following configuration to the appropriate file:
 }
 ```
 
-Replace `/path/to/docketbird-mcp/docketbird_mcp.py` with the absolute path to your `docketbird_mcp.py` file.
+
 
