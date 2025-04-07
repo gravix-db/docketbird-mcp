@@ -42,11 +42,18 @@ jobs:
             docker stop docketbird-mcp || true
             docker rm docketbird-mcp || true
 
-            # Run new container with environment variables
+            # Run new container with environment variables and restart policy
             docker run -d \
               --name docketbird-mcp \
+              --restart=always \
               -e DOCKETBIRD_API_KEY="${{ secrets.DOCKETBIRD_API_KEY }}" \
-              laurentsw/docketbird-mcp:latest
+              laurentsw/docketbird-mcp:latest /app/start.sh
+
+            # Wait a moment for the container to initialize
+            sleep 5
 
             # Print container logs to verify successful startup
             docker logs docketbird-mcp
+
+            # Check container status
+            docker ps | grep docketbird-mcp
