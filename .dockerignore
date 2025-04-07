@@ -1,0 +1,17 @@
+.git
+.github
+.gitignore
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+env/
+ENV/
+.DS_Store
+.cursorignore
+.cursorrules
+build/
+docketbird_mcp.egg-info/ 
