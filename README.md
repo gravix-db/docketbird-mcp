@@ -149,3 +149,5 @@ If the container isn't running, you can troubleshoot by checking:
 - Docker image exists: `docker images | grep docketbird`
 - Container logs for errors: `docker logs docketbird-mcp`
 - Server logs: Check if there are any permission or network issues
+
+# trigger update
