@@ -24,7 +24,6 @@ wheels/
 
 # Environment variables
 .env
-.github/workflows/*
 tests/*
 
 # IDE specific files
