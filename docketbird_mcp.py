@@ -1,8 +1,16 @@
 from mcp.server.fastmcp import FastMCP
+from starlette.applications import Starlette
+from mcp.server.sse import SseServerTransport
+from starlette.requests import Request
+from starlette.routing import Mount, Route
+from mcp.server import Server
+import uvicorn
 import requests
 import os
 import json
 from pathlib import Path
+import argparse
+
 
 # Initialize FastMCP server with environment variables
 mcp = FastMCP("docketbird")
@@ -16,13 +24,14 @@ HEADERS = {
     "Authorization": f"Bearer {os.getenv('DOCKETBIRD_API_KEY')}"
 }
 
+# Set up the SSE transport
+sse = SseServerTransport("/messages")
+
 # Helper function for making requests
 def make_request(endpoint, params=None):
     url = f"{BASE_URL}{endpoint}"
     response = requests.get(url, headers=HEADERS, params=params)
     return response.json()
-
-
 
 @mcp.tool()
 async def get_case_details(case_id: str) -> str:
@@ -431,12 +440,60 @@ def download_s3_document(url: str, save_location: str) -> str:
     except Exception as e:
         return f"Error downloading file: {str(e)}"
 
+# Define the SSE handler
+async def handle_sse(scope, receive, send):
+    async with sse.connect_sse(scope, receive, send) as streams:
+        await mcp.run(streams[0], streams[1], mcp.create_initialization_options())
+
+# Define the message handler
+async def handle_messages(scope, receive, send):
+    await sse.handle_post_message(scope, receive, send)
+
+
+def create_starlette_app(mcp_server: Server, *, debug: bool = False) -> Starlette:
+    """Create a Starlette application that can server the provied mcp server with SSE."""
+    sse = SseServerTransport("/messages/")
+
+    async def handle_sse(request: Request) -> None:
+        async with sse.connect_sse(
+                request.scope,
+                request.receive,
+                request._send,  # noqa: SLF001
+        ) as (read_stream, write_stream):
+            await mcp_server.run(
+                read_stream,
+                write_stream,
+                mcp_server.create_initialization_options(),
+            )
+
+    return Starlette(
+        debug=debug,
+        routes=[
+            Route("/sse", endpoint=handle_sse),
+            Mount("/messages/", app=sse.handle_post_message),
+        ],
+    )
+
+
+
 if __name__ == "__main__":
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Run MCP server with specified transport.")
+    parser.add_argument('--transport', choices=['stdio', 'sse'], default='stdio', help='Transport type: stdio or sse')
+    parser.add_argument('--host', default='0.0.0.0', help='Host to bind to')
+    parser.add_argument('--port', type=int, default=8080, help='Port to listen on')
+    args = parser.parse_args()
+
     # Check for required environment variables
     if not os.getenv('DOCKETBIRD_API_KEY'):
         print("Error: DOCKETBIRD_API_KEY environment variable is required")
         print("Please set it using: export DOCKETBIRD_API_KEY=your_api_key")
         exit(1)
-        
-    # Run the MCP server
-    mcp.run(transport='stdio') 
+
+    # Run the server based on the chosen transport
+    if args.transport == 'stdio':
+        mcp.run(transport='stdio')
+    elif args.transport == 'sse':
+        # Bind SSE request handling to MCP server
+        starlette_app = create_starlette_app(mcp._mcp_server, debug=True)
+        uvicorn.run(starlette_app, host=args.host, port=args.port)
