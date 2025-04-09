@@ -42,6 +42,7 @@ jobs:
               --name docketbird-mcp \
               --restart=always \
               -e DOCKETBIRD_API_KEY="${{ secrets.DOCKETBIRD_API_KEY }}" \
+              -e TRANSPORT_TYPE="sse" \
               -p 8040:8000 \
               laurentsw/docketbird-mcp:latest /app/start.sh
             sleep 5
