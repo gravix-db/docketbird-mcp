@@ -20,7 +20,7 @@ COPY . /app/
 EXPOSE 8000
 
 # Create a startup script with debug information
-RUN echo '#!/bin/bash\necho "Starting DocketBird MCP server..."\necho "API Key set: ${DOCKETBIRD_API_KEY:0:5}..."\npython -c "import os; print(f\"Environment variables: {dict(os.environ)}\")" | grep -v DOCKETBIRD_API_KEY\necho "Running python docketbird_mcp.py"\npython docketbird_mcp.py' > /app/start.sh && \
+RUN echo '#!/bin/bash\necho "Starting DocketBird MCP server..."\necho "API Key set: ${DOCKETBIRD_API_KEY:0:5}..."\necho "Transport type: ${TRANSPORT_TYPE}"\npython -c "import os; print(f\"Environment variables: {dict(os.environ)}\")" | grep -v DOCKETBIRD_API_KEY\necho "Running python docketbird_mcp.py with transport ${TRANSPORT_TYPE}"\npython docketbird_mcp.py --transport ${TRANSPORT_TYPE}' > /app/start.sh && \
     chmod +x /app/start.sh
 
 # Run the startup script

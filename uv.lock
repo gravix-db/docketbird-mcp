@@ -113,6 +113,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "requests" },
+    { name = "starlette" },
     { name = "termcolor" },
     { name = "uvicorn" },
 ]
@@ -120,10 +121,11 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi" },
-    { name = "mcp", specifier = ">=1.2.0" },
+    { name = "mcp", specifier = ">=1.6.0" },
     { name = "pydantic" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
     { name = "requests", specifier = ">=2.31.0" },
+    { name = "starlette", specifier = ">=0.21.0" },
     { name = "termcolor" },
     { name = "uvicorn" },
 ]
