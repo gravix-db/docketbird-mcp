@@ -43,7 +43,8 @@ set DOCKETBIRD_API_KEY=your_api_key_here     # On Windows
 Run the server using:
 
 ```bash
-uv run docketbird_mcp.py
+uv run docketbird_mcp.py --transport stdio  # For stdio transport
+uv run docketbird_mcp.py --transport sse    # For SSE transport
 ```
 
 ## Available Tools
@@ -101,7 +102,7 @@ The DocketBird MCP server can be deployed to a cloud server using Docker and Git
 
 ### Docker Deployment
 
-The server is containerized using Docker. You can build and run the Docker image locally:
+The server is containerized using Docker. You can build and run the Docker image locally with the desired transport type:
 
 ```bash
 # Build for ARM architecture (M1/M2 Mac)
@@ -110,11 +111,20 @@ docker buildx build --platform linux/arm64 -t docketbird-mcp-arm:latest --load .
 # Build for AMD architecture (standard servers)
 docker buildx build --platform linux/amd64 -t docketbird-mcp:latest --load .
 
-# Run locally
+# Run locally with stdio transport
 docker run -d \
-  --name docketbird-mcp \
+  --name docketbird-mcp-stdio \
   --restart=always \
   -e DOCKETBIRD_API_KEY="your_api_key_here" \
+  -e TRANSPORT_TYPE="stdio" \
+  docketbird-mcp-arm:latest /app/start.sh
+
+# Run locally with SSE transport
+docker run -d \
+  --name docketbird-mcp-sse \
+  --restart=always \
+  -e DOCKETBIRD_API_KEY="your_api_key_here" \
+  -e TRANSPORT_TYPE="sse" \
   docketbird-mcp-arm:latest /app/start.sh
 ```
 
