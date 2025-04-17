@@ -9,7 +9,9 @@ dependencies = [
     "uvicorn",
     "pydantic",
     "termcolor",
-    "starlette>=0.21.0"  # Add Starlette for the web framework
+    "starlette>=0.21.0",
+    "pydantic-ai",
+    "logfire",
 ]
 
 [build-system]
