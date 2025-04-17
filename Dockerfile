@@ -17,7 +17,7 @@ RUN uv pip install --system .
 COPY . /app/
 
 # Expose port for potential HTTP/API access (if needed in the future)
-EXPOSE 8000
+EXPOSE 8080
 
 # Create a startup script with debug information
 RUN echo '#!/bin/bash\necho "Starting DocketBird MCP server..."\necho "API Key set: ${DOCKETBIRD_API_KEY:0:5}..."\npython -c "import os; print(f\"Environment variables: {dict(os.environ)}\")" | grep -v DOCKETBIRD_API_KEY\necho "Running python docketbird_mcp.py"\npython docketbird_mcp.py' > /app/start.sh && \
