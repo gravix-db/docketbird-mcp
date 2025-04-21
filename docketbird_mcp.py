@@ -103,16 +103,15 @@ async def get_case_details(case_id: str) -> str:
         ...
     """
     # Get case details and documents
-    case_details = make_request(f"/cases/{case_id}")
     docs_response = make_request(f"/documents?case_id={case_id}")
     
-    if not case_details or not docs_response:
+    if not docs_response:
         return "Failed to retrieve case details or documents"
     
     # Get case data safely using .get()
-    case = case_details.get('data', {}).get('case', {})
+    case = docs_response.get('data', {}).get('case', {})
     
-    # Format basic case info
+    # Format basic case info    
     output = []
     output.append("=== CASE DETAILS ===")
     output.append(f"Title: {case.get('title', 'N/A')}")
@@ -124,7 +123,7 @@ async def get_case_details(case_id: str) -> str:
     output.append(f"Client Code: {case.get('client_code', 'N/A')}")
     
     # Add parties if available
-    parties = case_details.get('data', {}).get('parties', [])
+    parties = docs_response.get('data', {}).get('parties', [])
     if parties:
         output.append("\n=== PARTIES ===")
         for party in parties:
