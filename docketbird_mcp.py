@@ -29,9 +29,47 @@ sse = SseServerTransport("/messages")
 
 # Helper function for making requests
 def make_request(endpoint, params=None):
+    """Make a request to the DocketBird API with proper error handling.
+    
+    Raises:
+        requests.exceptions.RequestException: For any request-related errors
+    """
     url = f"{BASE_URL}{endpoint}"
-    response = requests.get(url, headers=HEADERS, params=params)
-    return response.json()
+    try:
+        response = requests.get(url, headers=HEADERS, params=params)
+        
+        # Handle 504 Gateway Timeout specifically
+        if response.status_code == 504:
+            try:
+                error_data = response.json()
+                if error_data.get("message") == "Endpoint request timed out":
+                    raise requests.exceptions.RequestException("The DocketBird API request timed out. Please try again later.")
+            except (ValueError, AttributeError):
+                raise requests.exceptions.RequestException("Gateway Timeout (504): The request to DocketBird API timed out")
+        
+        # Handle other common status codes
+        if response.status_code == 401:
+            raise requests.exceptions.RequestException("Authentication failed. Please check your API key.")
+        elif response.status_code == 403:
+            raise requests.exceptions.RequestException("Access forbidden. You don't have permission to access this resource.")
+        elif response.status_code == 404:
+            raise requests.exceptions.RequestException("Resource not found.")
+        
+        # Ensure the response was successful
+        response.raise_for_status()
+        return response.json()
+        
+    except requests.exceptions.ConnectionError:
+        raise requests.exceptions.RequestException("Failed to connect to DocketBird API. Please check your internet connection.")
+    except requests.exceptions.Timeout:
+        raise requests.exceptions.RequestException("The request timed out. Please try again later.")
+    except requests.exceptions.JSONDecodeError:
+        raise requests.exceptions.RequestException("Received invalid JSON response from the server.")
+    except requests.exceptions.RequestException:
+        # Re-raise any other request exceptions
+        raise
+    except Exception as e:
+        raise requests.exceptions.RequestException(f"An unexpected error occurred: {str(e)}")
 
 @mcp.tool()
 async def get_case_details(case_id: str) -> str:
@@ -102,52 +140,58 @@ async def get_case_details(case_id: str) -> str:
         Filed: 2023-01-15
         ...
     """
-    # Get case details and documents
-    docs_response = make_request(f"/documents?case_id={case_id}")
-    
-    if not docs_response:
-        return "Failed to retrieve case details or documents"
-    
-    # Get case data safely using .get()
-    case = docs_response.get('data', {}).get('case', {})
-    
-    # Format basic case info    
-    output = []
-    output.append("=== CASE DETAILS ===")
-    output.append(f"Title: {case.get('title', 'N/A')}")
-    output.append(f"Court: {case.get('court_id', 'N/A')}")
-    output.append(f"Filed: {case.get('date_filed', 'N/A')}")
-    output.append(f"Closed: {case.get('date_closed', 'N/A')}")
-    output.append(f"URL: {case.get('url', 'N/A')}")
-    output.append(f"PACER Case ID: {case.get('pacer_case_id', 'N/A')}")
-    output.append(f"Client Code: {case.get('client_code', 'N/A')}")
-    
-    # Add parties if available
-    parties = docs_response.get('data', {}).get('parties', [])
-    if parties:
-        output.append("\n=== PARTIES ===")
-        for party in parties:
-            output.append(f"- {party.get('name', 'N/A')} ({party.get('type', 'N/A')})")
-    
-    # Add documents if available
-    documents = docs_response.get('data', {}).get('documents', [])
-    if documents:
-        output.append("\n=== DOCUMENTS ===")
-        for idx, doc in enumerate(documents, 1):
-            output.append(f"\nDocument #{idx}")
-            output.append(f"Document ID: {doc.get('id', 'N/A')}")
-            output.append(f"Title: {doc.get('title', 'N/A')}")
-            output.append(f"Filed: {doc.get('filing_date', 'N/A')}")
-            output.append(f"Restricted: {doc.get('restricted', 'N/A')}")
-            output.append(f"Primary Docket Sheet Number: {doc.get('primary_docket_sheet_number', 'N/A')}")
-            output.append(f"PACER Document URL: {doc.get('pacer_document_url', 'N/A')}")
-            output.append(f"Downloaded: {doc.get('downloaded', 'N/A')}")
-            output.append(f"DocketBird Document URL: {doc.get('docketbird_document_url', 'N/A')}")
-            output.append(f"Custom Filename: {doc.get('custom_filename', 'N/A')}")
-            if doc.get('description'):
-                output.append(f"Description: {doc.get('description')}")
-    
-    return "\n".join(output)
+    try:
+        # Get case details and documents
+        docs_response = make_request(f"/documents?case_id={case_id}")
+        
+        if not docs_response:
+            return "Failed to retrieve case details or documents"
+        
+        # Get case data safely using .get()
+        case = docs_response.get('data', {}).get('case', {})
+        
+        # Format basic case info    
+        output = []
+        output.append("=== CASE DETAILS ===")
+        output.append(f"Title: {case.get('title', 'N/A')}")
+        output.append(f"Court: {case.get('court_id', 'N/A')}")
+        output.append(f"Filed: {case.get('date_filed', 'N/A')}")
+        output.append(f"Closed: {case.get('date_closed', 'N/A')}")
+        output.append(f"URL: {case.get('url', 'N/A')}")
+        output.append(f"PACER Case ID: {case.get('pacer_case_id', 'N/A')}")
+        output.append(f"Client Code: {case.get('client_code', 'N/A')}")
+        
+        # Add parties if available
+        parties = docs_response.get('data', {}).get('parties', [])
+        if parties:
+            output.append("\n=== PARTIES ===")
+            for party in parties:
+                output.append(f"- {party.get('name', 'N/A')} ({party.get('type', 'N/A')})")
+        
+        # Add documents if available
+        documents = docs_response.get('data', {}).get('documents', [])
+        if documents:
+            output.append("\n=== DOCUMENTS ===")
+            for idx, doc in enumerate(documents, 1):
+                output.append(f"\nDocument #{idx}")
+                output.append(f"Document ID: {doc.get('id', 'N/A')}")
+                output.append(f"Title: {doc.get('title', 'N/A')}")
+                output.append(f"Filed: {doc.get('filing_date', 'N/A')}")
+                output.append(f"Restricted: {doc.get('restricted', 'N/A')}")
+                output.append(f"Primary Docket Sheet Number: {doc.get('primary_docket_sheet_number', 'N/A')}")
+                output.append(f"PACER Document URL: {doc.get('pacer_document_url', 'N/A')}")
+                output.append(f"Downloaded: {doc.get('downloaded', 'N/A')}")
+                output.append(f"DocketBird Document URL: {doc.get('docketbird_document_url', 'N/A')}")
+                output.append(f"Custom Filename: {doc.get('custom_filename', 'N/A')}")
+                if doc.get('description'):
+                    output.append(f"Description: {doc.get('description')}")
+        
+        return "\n".join(output)
+        
+    except requests.exceptions.RequestException as e:
+        return f"Error retrieving case details: {str(e)}"
+    except Exception as e:
+        return f"An unexpected error occurred: {str(e)}"
 
 @mcp.tool()
 async def search_case_documents(case_id: str, search_term: str) -> str:
@@ -157,40 +201,46 @@ async def search_case_documents(case_id: str, search_term: str) -> str:
         case_id: The DocketBird case ID to search in
         search_term: Term to search for in document titles and descriptions
     """
-    docs_response = make_request(f"/documents?case_id={case_id}")
-    
-    if not docs_response:
-        return "Failed to retrieve case documents"
-    
-    documents = docs_response.get('data', {}).get('documents', [])
-    if not documents:
-        return "No documents found for this case"
-    
-    # Search through documents
-    search_term = search_term.lower()
-    matching_docs = []
-    
-    for doc in documents:
-        title = doc.get('title', '').lower()
-        desc = doc.get('description', '').lower()
+    try:
+        docs_response = make_request(f"/documents?case_id={case_id}")
         
-        if search_term in title or search_term in desc:
-            doc_info = [
-                f"\nDocument ID: {doc.get('id', 'N/A')}",
-                f"Title: {doc.get('title', 'N/A')}",
-                f"Filed: {doc.get('filing_date', 'N/A')}",
-                f"DocketBird URL: {doc.get('docketbird_document_url', 'N/A')}"
-            ]
-            if doc.get('description'):
-                doc_info.append(f"Description: {doc.get('description')}")
-            matching_docs.append("\n".join(doc_info))
-    
-    if not matching_docs:
-        return f"No documents found matching search term: {search_term}"
-    
-    output = [f"Found {len(matching_docs)} matching documents:"]
-    output.extend(matching_docs)
-    return "\n".join(output)
+        if not docs_response:
+            return "Failed to retrieve case documents"
+        
+        documents = docs_response.get('data', {}).get('documents', [])
+        if not documents:
+            return "No documents found for this case"
+        
+        # Search through documents
+        search_term = search_term.lower()
+        matching_docs = []
+        
+        for doc in documents:
+            title = doc.get('title', '').lower()
+            desc = doc.get('description', '').lower()
+            
+            if search_term in title or search_term in desc:
+                doc_info = [
+                    f"\nDocument ID: {doc.get('id', 'N/A')}",
+                    f"Title: {doc.get('title', 'N/A')}",
+                    f"Filed: {doc.get('filing_date', 'N/A')}",
+                    f"DocketBird URL: {doc.get('docketbird_document_url', 'N/A')}"
+                ]
+                if doc.get('description'):
+                    doc_info.append(f"Description: {doc.get('description')}")
+                matching_docs.append("\n".join(doc_info))
+        
+        if not matching_docs:
+            return f"No documents found matching search term: {search_term}"
+        
+        output = [f"Found {len(matching_docs)} matching documents:"]
+        output.extend(matching_docs)
+        return "\n".join(output)
+        
+    except requests.exceptions.RequestException as e:
+        return f"Error searching case documents: {str(e)}"
+    except Exception as e:
+        return f"An unexpected error occurred while searching: {str(e)}"
 
 @mcp.tool()
 async def download_available_files(case_id: str, save_path: str) -> str:
@@ -200,36 +250,45 @@ async def download_available_files(case_id: str, save_path: str) -> str:
         case_id: The DocketBird case ID to download documents from
         save_path: Absolute path where files should be saved. It should be a folder path.
     """
-    # Get documents for the case
-    docs_response = make_request(f"/documents?case_id={case_id}")
-    
-    if not docs_response:
-        return "Failed to retrieve case documents"
-    
-    documents = docs_response.get('data', {}).get('documents', [])
-    if not documents:
-        return "No documents found for this case"
-    
-    # Track download results
-    download_results = []
-    
-    for doc in documents:
-        doc_id = doc.get('id', 'N/A')
-        doc_title = doc.get('title', 'N/A')
-        s3_url = doc.get('docketbird_document_url')
+    try:
+        docs_response = make_request(f"/documents?case_id={case_id}")
         
-        if s3_url:
-            result = download_s3_document(s3_url, save_path)
-            download_results.append(f"Document: {doc_title} (ID: {doc_id})\nStatus: {result}\n")
-    
-    # Prepare result message
-    result = []
-    result.append(f"\nDownload Results for Case {case_id}:")
-    result.append(f"Save Location: {save_path}\n")
-    result.append("=== Individual File Results ===")
-    result.extend(download_results if download_results else ["No documents were available for download"])
-    
-    return "\n".join(result)
+        if not docs_response:
+            return "Failed to retrieve case documents"
+        
+        documents = docs_response.get('data', {}).get('documents', [])
+        if not documents:
+            return "No documents found for this case"
+        
+        # Track download results
+        download_results = []
+        
+        for doc in documents:
+            try:
+                doc_id = doc.get('id', 'N/A')
+                doc_title = doc.get('title', 'N/A')
+                s3_url = doc.get('docketbird_document_url')
+                
+                if s3_url:
+                    result = download_s3_document(s3_url, save_path)
+                    download_results.append(f"Document: {doc_title} (ID: {doc_id})\nStatus: {result}\n")
+            except Exception as e:
+                download_results.append(f"Document: {doc_title} (ID: {doc_id})\nStatus: Failed - {str(e)}\n")
+                continue
+        
+        # Prepare result message
+        result = []
+        result.append(f"\nDownload Results for Case {case_id}:")
+        result.append(f"Save Location: {save_path}\n")
+        result.append("=== Individual File Results ===")
+        result.extend(download_results if download_results else ["No documents were available for download"])
+        
+        return "\n".join(result)
+        
+    except requests.exceptions.RequestException as e:
+        return f"Error retrieving case documents: {str(e)}"
+    except Exception as e:
+        return f"An unexpected error occurred during download: {str(e)}"
 
 @mcp.tool()
 async def download_document_by_id(document_id: str, save_path: str) -> str:
@@ -267,33 +326,39 @@ async def list_cases(scope: str) -> str:
     Args:
         scope: Either "company" or "user" to specify whose cases to retrieve
     """
-    # Validate scope parameter
-    if scope not in ["company", "user"]:
-        return "Error: scope must be either 'company' or 'user'"
-    
-    # Make request to /cases endpoint with scope parameter
-    response = make_request(f"/cases?scope={scope}")
-    
-    if not response:
-        return "Failed to retrieve cases"
-    
-    cases = response.get('data', {}).get('cases', [])
-    if not cases:
-        return f"No cases found for {scope} scope"
-    
-    # Format output
-    output = []
-    output.append(f"\n=== {scope.upper()} CASES ===\n")
-    
-    for case in cases:
-        output.append(f"ID: {case.get('id', 'N/A')}")
-        output.append(f"Title: {case.get('title', 'N/A')}")
-        output.append(f"Court: {case.get('court_id', 'N/A')}")
-        output.append(f"Case Number: {case.get('case_number', 'N/A')}")
-        output.append(f"Date Filed: {case.get('date_filed', 'N/A')}")
-        output.append("")  # Empty line between cases
-    
-    return "\n".join(output)
+    try:
+        # Validate scope parameter
+        if scope not in ["company", "user"]:
+            return "Error: scope must be either 'company' or 'user'"
+        
+        # Make request to /cases endpoint with scope parameter
+        response = make_request(f"/cases?scope={scope}")
+        
+        if not response:
+            return "Failed to retrieve cases"
+        
+        cases = response.get('data', {}).get('cases', [])
+        if not cases:
+            return f"No cases found for {scope} scope"
+        
+        # Format output
+        output = []
+        output.append(f"\n=== {scope.upper()} CASES ===\n")
+        
+        for case in cases:
+            output.append(f"ID: {case.get('id', 'N/A')}")
+            output.append(f"Title: {case.get('title', 'N/A')}")
+            output.append(f"Court: {case.get('court_id', 'N/A')}")
+            output.append(f"Case Number: {case.get('case_number', 'N/A')}")
+            output.append(f"Date Filed: {case.get('date_filed', 'N/A')}")
+            output.append("")  # Empty line between cases
+        
+        return "\n".join(output)
+        
+    except requests.exceptions.RequestException as e:
+        return f"Error retrieving cases list: {str(e)}"
+    except Exception as e:
+        return f"An unexpected error occurred while listing cases: {str(e)}"
 
 @mcp.tool()
 async def list_courts_and_types() -> str:
