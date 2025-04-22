@@ -70,6 +70,14 @@ The MCP server configuration can be added to one of these locations depending on
 - Cursor: `~/.cursor/mcp.json`
 - Claude in mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
+* How to open Claude Desktop config file from app
+   - Launch Claude Desktop application
+   - Navigate to the application menu and select Settings
+   - Select Developer from the left navigation panel
+   - Click the Edit Config button
+   - Your system will automatically open the configuration file in your default text editor
+
+
 1. Install uv if you haven't already:
 
 ```bash
@@ -78,23 +86,56 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 Add the following configuration to the appropriate file:
 
-```json
-{
-  "mcpServers": {
-    "docketbird-mcp": {
-            "command": "uv",
-            "args": [
-                "run",
-                "--directory",
-                "PATH_TO_THE_SERVER/docketbird-mcp",
-                "python",
-                "docketbird_mcp.py"],
-            "env": {
-                "DOCKETBIRD_API_KEY": "YOUR_KEY"
-            }
-        }
-}
-```
+  *For macOS:*
+  
+  ``` json
+   {
+     "mcpServers": {
+       "docketbird-mcp": {
+         "command": "uv",
+         "args": [
+           "run",
+           "--directory",
+           "PATH_TO_THE_SERVER/docketbird-mcp",
+           "python",
+           "docketbird_mcp.py"
+         ],
+         "env": {
+           "DOCKETBIRD_API_KEY": "YOUR_KEY"
+         }
+       }
+     }
+   }
+   ```
+   
+
+   *For Windows:*
+   ```json
+   {
+     "mcpServers": {
+       "docketbird-mcp": {
+         "command": "uv",
+         "args": [
+           "run",
+           "--directory",
+           "PATH_TO_SERVER\\docketbird-mcp",
+           "python",
+           "docketbird_mcp.py"
+         ],
+         "env": {
+           "DOCKETBIRD_API_KEY": "YOUR_KEY"
+         }
+       }
+     }
+   }
+   ```
+   
+
+   Be sure to replace:
+   - PATH_TO_THE_SERVER with the actual path to where you cloned the DocketBird MCP repository (for macOS)
+   - PATH_TO_SERVER with the actual path to where you cloned the DocketBird MCP repository (for Windows)
+   - YOUR_KEY with your actual DocketBird API key
+
 
 ## Deployment
 
@@ -159,5 +200,3 @@ If the container isn't running, you can troubleshoot by checking:
 - Docker image exists: `docker images | grep docketbird`
 - Container logs for errors: `docker logs docketbird-mcp`
 - Server logs: Check if there are any permission or network issues
-
-#### trigger update
