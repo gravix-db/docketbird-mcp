@@ -58,12 +58,12 @@ async def main():
     print(colored("Welcome to Docket Agent - Your Legal Research Assistant", "cyan"))
     print()
     print(colored("✓ Find cases with natural language queries", "green"))
-    print(colored("✓ Retrieve case details and documents from federal courts", "green"))
+    print(colored("✓ Retrieve case details and documents from courts", "green"))
+    print(colored("✓ Search across all cases in your DocketBird account", "green"))
     print(
-        colored("✓ Download documents to case-specific folders automatically", "green")
+        colored("✓ Leverage DocketBird's extensive library of court documents", "green")
     )
-    print(colored("✓ Save and restore conversation sessions", "green"))
-    print(colored("✓ Real-time streaming responses", "green"))
+    print(colored("✓ Download documents to your local drive", "green"))
     print()
     print(colored("Try 'Please retrieve details for txnd-3:2007-cv-01697'", "yellow"))
     print(colored("Type 'exit' or 'quit' to end the session", "yellow"))
@@ -71,7 +71,9 @@ async def main():
 
     async with agent.run_mcp_servers():
         # Get initial query from user instead of hardcoding
-        initial_query = input(colored("What would you like to search for? > ", "cyan"))
+        initial_query = input(
+            colored("What would you like to get from DocketBird? > ", "cyan")
+        )
         print(colored("Searching...", "yellow"))
 
         result = await agent.run(initial_query)
