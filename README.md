@@ -199,7 +199,7 @@ If the container isn't running, you can troubleshoot by checking:
 - Container logs for errors: `docker logs docketbird-mcp`
 - Server logs: Check if there are any permission or network issues
 
-## Docket Agent Prototype
+## DocketBird Agent Prototype
 
 A prototype agent has been created to interact with the deployed DocketBird MCP server. This agent provides a user-friendly interface for querying case information and document details.
 
@@ -223,7 +223,7 @@ set OPENAI_API_KEY=your_openai_api_key_here     # On Windows
 
 ```bash
 cd agents
-python docketbird_agent.py
+python db_agent_prototype.py
 ```
 
 3. The agent will display a welcome banner and prompt you for your first query.
