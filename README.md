@@ -71,12 +71,11 @@ The MCP server configuration can be added to one of these locations depending on
 - Claude in mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 * How to open Claude Desktop config file from app
-   - Launch Claude Desktop application
-   - Navigate to the application menu and select Settings
-   - Select Developer from the left navigation panel
-   - Click the Edit Config button
-   - Your system will automatically open the configuration file in your default text editor
-
+  - Launch Claude Desktop application
+  - Navigate to the application menu and select Settings
+  - Select Developer from the left navigation panel
+  - Click the Edit Config button
+  - Your system will automatically open the configuration file in your default text editor
 
 1. Install uv if you haven't already:
 
@@ -86,56 +85,55 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 Add the following configuration to the appropriate file:
 
-  *For macOS:*
-  
-  ``` json
-   {
-     "mcpServers": {
-       "docketbird-mcp": {
-         "command": "uv",
-         "args": [
-           "run",
-           "--directory",
-           "PATH_TO_THE_SERVER/docketbird-mcp",
-           "python",
-           "docketbird_mcp.py"
-         ],
-         "env": {
-           "DOCKETBIRD_API_KEY": "YOUR_KEY"
-         }
-       }
-     }
-   }
-   ```
-   
+_For macOS:_
 
-   *For Windows:*
-   ```json
-   {
-     "mcpServers": {
-       "docketbird-mcp": {
-         "command": "uv",
-         "args": [
-           "run",
-           "--directory",
-           "PATH_TO_SERVER\\docketbird-mcp",
-           "python",
-           "docketbird_mcp.py"
-         ],
-         "env": {
-           "DOCKETBIRD_API_KEY": "YOUR_KEY"
-         }
-       }
-     }
-   }
-   ```
-   
+```json
+{
+  "mcpServers": {
+    "docketbird-mcp": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "PATH_TO_THE_SERVER/docketbird-mcp",
+        "python",
+        "docketbird_mcp.py"
+      ],
+      "env": {
+        "DOCKETBIRD_API_KEY": "YOUR_KEY"
+      }
+    }
+  }
+}
+```
 
-   Be sure to replace:
-   - PATH_TO_THE_SERVER with the actual path to where you cloned the DocketBird MCP repository (for macOS)
-   - PATH_TO_SERVER with the actual path to where you cloned the DocketBird MCP repository (for Windows)
-   - YOUR_KEY with your actual DocketBird API key
+_For Windows:_
 
+```json
+{
+  "mcpServers": {
+    "docketbird-mcp": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "PATH_TO_SERVER\\docketbird-mcp",
+        "python",
+        "docketbird_mcp.py"
+      ],
+      "env": {
+        "DOCKETBIRD_API_KEY": "YOUR_KEY"
+      }
+    }
+  }
+}
+```
+
+Be sure to replace:
+
+- PATH_TO_THE_SERVER with the actual path to where you cloned the DocketBird MCP repository (for macOS)
+- PATH_TO_SERVER with the actual path to where you cloned the DocketBird MCP repository (for Windows)
+- YOUR_KEY with your actual DocketBird API key
 
 ## Deployment
 
@@ -200,3 +198,47 @@ If the container isn't running, you can troubleshoot by checking:
 - Docker image exists: `docker images | grep docketbird`
 - Container logs for errors: `docker logs docketbird-mcp`
 - Server logs: Check if there are any permission or network issues
+
+## Docket Agent Prototype
+
+A prototype agent has been created to interact with the deployed DocketBird MCP server. This agent provides a user-friendly interface for querying case information and document details.
+
+### Features
+
+- Interactive command-line interface
+- Natural language querying for case information
+- Connects to the deployed DocketBird MCP server
+
+### Setup and Running
+
+1. Ensure you have the OpenAI API key set as an environment variable:
+
+```bash
+export OPENAI_API_KEY=your_openai_api_key_here  # On Unix/MacOS
+# OR
+set OPENAI_API_KEY=your_openai_api_key_here     # On Windows
+```
+
+2. Navigate to the project directory and run the agent:
+
+```bash
+cd agents
+python docketbird_agent.py
+```
+
+3. The agent will display a welcome banner and prompt you for your first query.
+
+4. Example queries:
+   - "Please retrieve details for txnd-3:2007-cv-01697"
+   - "What documents are available in this case?"
+   - "When was the last filing in this case?"
+
+### Requirements
+
+The agent requires:
+
+- OpenAI API key (for GPT-4.1 model)
+- Internet connection to access the deployed MCP server
+- Python dependencies: pydantic_ai, termcolor, python-dotenv
+
+Note: This is a prototype that uses the already deployed DocketBird MCP server at http://165.227.221.151:8040/sse.
